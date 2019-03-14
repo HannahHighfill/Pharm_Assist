@@ -3,12 +3,9 @@
 
 
 # Working Plan #
-Models.py
-* Jamie
-View.py
-* Hannah
-Templates 
-* Kendyl
+* Jamie: Models.py
+* Hannah: View.py 
+* Kendyl: Templates
 
 # Templates & APIs #
 **API**
