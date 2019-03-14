@@ -10,12 +10,12 @@ View.py
 Templates 
 * Kendyl
 
-## Templates & APIs ##
+# Templates & APIs #
 **API**
 * Google Calendar's API: https://developers.google.com/calendar/
 
 **Django Template**
 * TBD
 
-## Wireframes ##
+# Wireframes #
 Coming soon
