@@ -1,5 +1,5 @@
 # Pharm_Assist #
-**Description:** Pharm Assist integrates with your Google Calendar, adding prescription reminders through a simple input form. See the full list of your prescriptions on the homepage, easily add reminders, and choose how far in advance you'd like to get a reminder. Choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar.
+**Description:** Pharm Assist integrates with your Google Calendar, adding prescription reminders through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, and choose how far in advance you'd like to get a reminder. Choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. With Pharm_assist you have an easy-to-reach list of your prescription refills and your reminders are integrated into how you already use calendars.
 
 **Team Members:** Jamie, Kendyl, Hannah
 
