@@ -16,3 +16,12 @@
 
 # Wireframes #
 Coming soon
+
+* Landing Page: Sign into Google to display your calendar
+* Add Prescription Page with form:
+  * Nickname of prescription
+  * Prescription number for refill
+  * Date for refill
+  * How often does it recur
+  * Pharmacy location
+  * How long beforehand would you like to be reminded?
