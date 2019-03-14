@@ -8,6 +8,9 @@
 * Hannah: View.py 
 * Kendyl: Templates
 
+# Site #
+https://hannahhighfill.github.io/Pharm_Assist/
+
 # Templates & APIs #
 **API**
 * Google Calendar's API: https://developers.google.com/calendar/
