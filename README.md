@@ -9,6 +9,14 @@
 * Kendyl: Templates HTML & bootstrapping
 * Google API will be shared by Jamie & Hannah
 
+**Plan**
+We will start from the Twitten class activity because it has functionality and structure for creating user and posting/deleting tweets. We will Add the Google calendar API and change the post functionality so it becomes a way to add prescription reminders to your list and post them to your calendar. As outlined below,
+
+**Possible ideas:**
+* Since there is a built in ability to add photos, photos of your prescription could be added
+* If the calendar API allows, we will allow users to choose when they'd like to be reminded
+* Since a logo is offered for each "tweet" (which will become prescriptions) we could offer users the ability to add an image correlation on their calendars, similar to the nickname idea this would mean their prescriptions are kept private on calendar but recognizable for them
+
 **Expected challenges**
 The Google Calendar API has some unknown so we will see how difficult that is. We are also not sure if we will need separate signins for Google and for Pharm-assist. The pages we are hoping to make are modest, so hopefully no unforeseen issues there.
 
