@@ -23,6 +23,7 @@ https://hannahhighfill.github.io/Pharm_Assist/
 * TBD
 
 # Wireframes #
+![Image of Wireframe 1](https://github.com/HannahHighfill/Pharm_Assist/blob/master/IMG-3390.JPG)
 IMG-3390.JPG
 IMG-3391.JPG
 IMG-3392.JPG
