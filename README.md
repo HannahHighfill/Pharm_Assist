@@ -17,11 +17,15 @@
 # Wireframes #
 Coming soon
 
-* Landing Page: Sign into Google to display your calendar
-* Add Prescription Page with form:
+**Pages**
+1. Landing Page: 
+  * Sign into your Google account for OAuth
+  * (?) create Pharm-assist account
+2. Landing Page: Sign into Google to display your calendar
+3. Add Prescription Page with form:
   * Nickname of prescription
   * Prescription number for refill
   * Date for refill
   * How often does it recur
   * Pharmacy location
-  * How long beforehand would you like to be reminded?
+  * How long beforehand would you like to be reminded? 
