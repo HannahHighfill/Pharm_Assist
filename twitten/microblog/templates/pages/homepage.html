@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<div class="row">
+    <div class="col" id="hero">
+        <h1>Yell about your interests.</h1>
+        <h1>Ignore what people are talking about.</h1>
+        <h1>Join the intellectual discussions.</h1>
+    </div>
+    <div class="col">
+        {% if user.is_authenticated %}
+            <h1>Welcome {{ user.username }}</h1>
+            <hr />
+        {% endif %}
+        <h1 style="text-align: center; margin: 10vh">
+            <img src="{% static "the_bird.png" %}" style="width: 10vh" /> twitten
+        </h1>
+
+        <form action="." method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-lg btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}
+

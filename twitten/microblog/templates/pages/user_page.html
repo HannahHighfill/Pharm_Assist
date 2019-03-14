@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h1>@{{ user_on_page.username }}</h1>
+            <h3>Profile</h3>
+            <p><strong>First name:</strong> {{ user_on_page.first_name }}</p>
+            <p><strong>Last name:</strong> {{ user_on_page.last_name }}</p>
+            <p><strong>Email:</strong> {{ user_on_page.email }}</p>
+            {% if user.is_authenticated and user.username == user_on_page.username %}
+                <a class="btn btn-lg btn-info" href="/users/{{ user.username }}/edit-profile/">Edit</a>
+            {% endif %}
+        </div>
+        <div class="col-md-9">
+            {% if user.is_authenticated and user.username == user_on_page.username %}
+                <form enctype="multipart/form-data" method="post" action=".">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-lg btn-info">Tweet</button>
+                </form>
+            {% endif %}
+            {% include "snippets/tweets.html" %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

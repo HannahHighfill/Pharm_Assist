@@ -1,0 +1,31 @@
+
+{% for tweet in tweets %}
+<div class="tweet card">
+    <div class="row">
+        <p class="card-title">
+            <a href="/users/{{ tweet.username }}/">
+                <img src="{{ tweet.get_gravatar }}" />
+                {% if tweet.image %}
+                    <img src="{{ tweet.image.url }}" style="max-height: 80px"/>
+                {% endif %}
+                <strong>@{{ tweet.username }}</strong>
+            </a>
+            {{ tweet.text }}
+        </p>
+    </div>
+
+    {% if user.is_authenticated %}
+        {% if user.username == tweet.username %}
+            <div class="links">
+                <a href="/delete-tweet/{{ tweet.id }}/" class="btn btn-link">
+                    <i class="octicon octicon-trashcan"></i>
+                </a>
+                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ tweet.id }}">
+                    <i class="octicon octicon-pencil"></i>
+                </button>
+                {% include "snippets/edit_tweet_modal.html" %}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endfor %}
