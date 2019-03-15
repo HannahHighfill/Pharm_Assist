@@ -118,7 +118,15 @@ def update_tweet(request, tweet_id):
     # Redirect to wherever they came from
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+def login(request, username):
+    context={
+    }
+    return render(request, 'pages/login.html', context)
 
+def logout(request, username):
+    context={
+    }
+    return render(request, 'pages/logout.html', context)
 
 
 def edit_user_profile(request, username):

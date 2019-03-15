@@ -9,19 +9,13 @@
         <h1>Join the intellectual discussions.</h1>
     </div>
     <div class="col">
-        {% if user.is_authenticated %}
-            <h1>Welcome {{ user.username }}</h1>
-            <hr />
-        {% endif %}
-        <h1 style="text-align: center; margin: 10vh">
-            <img src="{% static "the_bird.png" %}" style="width: 10vh" /> twitten
-        </h1>
-
-        <form action="." method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-lg btn-primary">Register</button>
-        </form>
+        {% block content %}
+	        {% if user.is_authenticated %}
+                     <p class="display-4">Hello, {{ user.username }}</p>
+	        {% else %}
+                     <a class="lead" href="{% url 'login' %}">Log in</a>
+	        {% endif %}
+        {% endblock content %}
     </div>
 </div>
 
