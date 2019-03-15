@@ -50,7 +50,15 @@ def homepage(request):
     }
     return render(request, 'pages/homepage.html', context)
 
+def login(request):
+    context={
+    }
+    return render(request, 'pages/login.html', context)
 
+def logout(request):
+    context={
+    }
+    return render(request, 'pages/logout.html', context)
 
 def view_all_tweets(request):
     tweets = Tweet.objects.order_by('-created')
@@ -117,16 +125,6 @@ def update_tweet(request, tweet_id):
 
     # Redirect to wherever they came from
     return redirect(request.META.get('HTTP_REFERER', '/'))
-
-def login(request, username):
-    context={
-    }
-    return render(request, 'pages/login.html', context)
-
-def logout(request, username):
-    context={
-    }
-    return render(request, 'pages/logout.html', context)
 
 
 def edit_user_profile(request, username):

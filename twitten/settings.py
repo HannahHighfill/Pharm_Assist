@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from secret_settings import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -116,8 +117,6 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ="356344142805-ls9g1o0l1m422c5c6880o43o270k6j07.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "jXESXJ-9MqJRM1FGbOr_Qyf1"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
-   <br>
-  <p><strong>-- OR --</strong></p>
-  <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
+<div class="row">
+    <div class="col" id="hero">
+        <h1>Yell about your interests.</h1>
+        <h1>Ignore what people are talking about.</h1>
+        <h1>Join the intellectual discussions.</h1>
+    </div>
+    <div class="col">
+      <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
 {% endblock content %}

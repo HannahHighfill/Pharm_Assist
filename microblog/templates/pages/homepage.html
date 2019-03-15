@@ -9,13 +9,13 @@
         <h1>Join the intellectual discussions.</h1>
     </div>
     <div class="col">
-        {% block content %}
+        
 	        {% if user.is_authenticated %}
                      <p class="display-4">Hello, {{ user.username }}</p>
 	        {% else %}
                      <a class="lead" href="{% url 'login' %}">Log in</a>
 	        {% endif %}
-        {% endblock content %}
+        
     </div>
 </div>
 
