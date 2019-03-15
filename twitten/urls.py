@@ -31,6 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+    path('calendar/', views.calendar, name='calendar'),
     url(r'^auth/', include('social_django.urls', namespace='social')),
 ]
 
