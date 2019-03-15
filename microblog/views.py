@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.contrib.auth import logout as auth_logout
+
 
 from .models import Tweet
 
@@ -56,9 +58,8 @@ def login(request):
     return render(request, 'pages/login.html', context)
 
 def logout(request):
-    context={
-    }
-    return render(request, 'pages/logout.html', context)
+    auth_logout(request)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
     
 def calendar(request):
     context={
