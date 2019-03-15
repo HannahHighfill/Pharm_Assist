@@ -15,6 +15,7 @@ from django.contrib.auth import logout as auth_logout
 
 
 from .models import Tweet
+from .models import RefillEvent
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 
@@ -35,6 +36,11 @@ class TweetForm(forms.ModelForm):
     class Meta:
         model = Tweet
         fields = ['text', 'image']
+        
+class RefillEvent(forms.ModelForm):
+    class Meta:
+        model = RefillEvent
+        fields = ['summary', 'location', 'description', 'startdatetime', 'enddatetime']
 
 
 def homepage(request):
@@ -127,6 +133,7 @@ def calendar(request):
 #      {'method': 'popup', 'minutes': 10},
 #    ],
 #  },
+# we can add these commented out fields later. no need to for testing right now
             }
 
             event = service.events().insert(calendarId='primary', body=event).execute()
@@ -147,6 +154,28 @@ def calendar(request):
                 'username':request.user.username 
             }
             return render(request, 'pages/calendar.html', context)
+
+def new_med(request):
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request
+        form = RefillEvent(request.POST)
+
+        if form.is_valid():
+            refillevent = form.save(commit=False)
+            refillevent.username = request.user.username
+            refillevent.save()
+
+            return redirect('/')
+
+    else:
+        # if a GET we'll create a blank form
+        form = RefillEvent()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'pages/new_med.html', context)
 
 def view_all_tweets(request):
     tweets = Tweet.objects.order_by('-created')
