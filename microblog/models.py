@@ -5,9 +5,6 @@ from django.contrib.auth.models import User
 import hashlib
 
 class Tweet(models.Model):
-    # Challenge #2:
-    # "username" field has been replaced with "user" field
-    # username = models.CharField(max_length=64)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -18,6 +15,11 @@ class Tweet(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     image = models.FileField(upload_to='tweet_images/', null=True, blank=True)
+
+    liked = models.ManyToManyField(
+        User,
+        related_name="liked_tweets",
+    )
 
     def get_gravatar(self):
         # This is the example code found online for Gravatar, which will
@@ -30,4 +32,19 @@ class Tweet(models.Model):
 
     def __str__(self):
         return self.user.name + ' said ' + self.text
+        
+class RefillEvent(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    summary = models.CharField(max_length=160)
+    location = models.CharField(max_length=160)
+    description = models.TextField()
+    startdatetime = models.DateTimeField()
+    timezone = 'America/Los_Angeles'
+    enddatetime = models.DateTimeField()
+#    recurrence = 'RRULE:FREQ=DAILY;COUNT=2'
+#    reminder = models.BooleanField()
+# This will create a table in sqlite. make a form from it. use the form to populate an event variable. the calendar views adds that event to the calendar
 
