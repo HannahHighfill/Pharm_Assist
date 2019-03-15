@@ -34,12 +34,12 @@ https://hannahhighfill.github.io/Pharm_Assist/
 * TBD
 
 # Wireframes #
-![Image of Wireframe 1](https://github.com/HannahHighfill/Pharm_Assist/blob/master/Wireframe_images/IMG_2697.jpg)
-![Image of Wireframe 2](https://github.com/HannahHighfill/Pharm_Assist/blob/master/IMG_2698.jpg)
-![Image of Wireframe 3](https://github.com/HannahHighfill/Pharm_Assist/blob/master/IMG_2699.jpg)
-![Image of Wireframe 4](https://github.com/HannahHighfill/Pharm_Assist/blob/master/IMG-3390.JPG)
-![Image of Wireframe 5](https://github.com/HannahHighfill/Pharm_Assist/blob/master/IMG-3391.JPG)
-![Image of Wireframe 6](https://github.com/HannahHighfill/Pharm_Assist/blob/master/IMG-3392.JPG)
+![Image of Wireframe 1](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG_2697.jpg)
+![Image of Wireframe 2](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG_2698.jpg)
+![Image of Wireframe 3](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG_2699.jpg)
+![Image of Wireframe 4](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG-3390.JPG)
+![Image of Wireframe 5](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG-3391.JPG)
+![Image of Wireframe 6](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG-3392.JPG)
 
 
 **Pages**
