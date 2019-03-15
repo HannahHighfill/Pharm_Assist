@@ -56,10 +56,6 @@ def login(request):
     return render(request, 'pages/login.html', context)
 
 def logout(request):
-    if request.user==True:
-        u = request.user
-        storage=Storage(CredentialsModel, 'id', u, 'credential') #Storage object corresponding to u, which should be have already a Credentials object written to it
-        storage.delete()
     context={
     }
     return render(request, 'pages/logout.html', context)
