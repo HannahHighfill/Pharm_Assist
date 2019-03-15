@@ -16,17 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
+from django.conf.urls import url, include
+from django.contrib.auth import views
 
 from microblog import views
 
 urlpatterns = [
-    path('', views.homepage),
+    path('', views.homepage, name='home'),
     path('all-tweets/', views.view_all_tweets, name="all_tweets"),
     path('users/<username>/', views.user_page, name="user_page"),
     path('users/<username>/edit-profile/', views.edit_user_profile),
     path('update-tweet/<tweet_id>/', views.update_tweet),
     path('delete-tweet/<tweet_id>/', views.delete_tweet),
     path('admin/', admin.site.urls),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+    url(r'^auth/', include('social_django.urls', namespace='social')),
 ]
 
 # NOTE: To get media working, we need to do something like this. See
