@@ -62,18 +62,6 @@ def homepage(request):
     return render(request, 'pages/homepage.html', context)
 
 def login(request):
-    context={
-    }
-    return render(request, 'pages/login.html', context)
-
-def logout(request):
-    auth_logout(request)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
-    
-def calendar(request):
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
-    """
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -92,27 +80,42 @@ def calendar(request):
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
-
-    service = build('calendar', 'v3', credentials=creds)
-
-    # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
-        
     context={
-        'username':request.user.username 
     }
-    return render(request, 'pages/calendar.html', context)
+    return render(request, 'pages/login.html', context)
+
+def logout(request):
+    auth_logout(request)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+    
+def calendar(request):
+    """Shows basic usage of the Google Calendar API.
+    Prints the start and name of the next 10 events on the user's calendar.
+    """
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+
+            service = build('calendar', 'v3', credentials=creds)
+
+            # Call the Calendar API
+            now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+            print('Getting the upcoming 10 events')
+            events_result = service.events().list(calendarId='primary', timeMin=now,
+                                                maxResults=10, singleEvents=True,
+                                                orderBy='startTime').execute()
+            events = events_result.get('items', [])
+
+            if not events:
+                print('No upcoming events found.')
+            for event in events:
+                start = event['start'].get('dateTime', event['start'].get('date'))
+                print(start, event['summary'])
+                
+            context={
+                'username':request.user.username 
+            }
+            return render(request, 'pages/calendar.html', context)
 
 def view_all_tweets(request):
     tweets = Tweet.objects.order_by('-created')
