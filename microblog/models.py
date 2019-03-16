@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 import hashlib
 
-class Tweet(models.Model):
+class Refill(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -14,11 +14,11 @@ class Tweet(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
-    image = models.FileField(upload_to='tweet_images/', null=True, blank=True)
+    image = models.FileField(upload_to='refill_images/', null=True, blank=True)
 
     liked = models.ManyToManyField(
         User,
-        related_name="liked_tweets",
+        related_name="liked_refills",
     )
 
     def get_gravatar(self):
