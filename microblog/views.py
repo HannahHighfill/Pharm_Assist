@@ -3,8 +3,12 @@ import datetime
 from datetime import timedelta
 import pickle
 import os.path
+import wsgiref
+import webbrowser
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google_auth_oauthlib.flow import _RedirectWSGIApp, _WSGIRequestHandler
+from wsgiref.simple_server import make_server
 from google.auth.transport.requests import Request # All from google api example
 
 from django.shortcuts import render, redirect
@@ -47,24 +51,27 @@ class RefillEvent(forms.ModelForm):
 # This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
 #currently the homepage logs a user in or says hello to them
 def homepage(request):
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server()
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
+#none of this is necessary except to create token.pickle
+    #    creds = None
+    #    # The file token.pickle stores the user's access and refresh tokens, and is
+    #    # created automatically when the authorization flow completes for the first
+    #    # time.
+    #    if os.path.exists('token.pickle'):
+    #        with open('token.pickle', 'rb') as token:
+    #            creds = pickle.load(token)
+    #            print(creds)
+    #    # If there are no (valid) credentials available, let the user log in.
+    #    if not creds or not creds.valid:
+    #        if creds and creds.expired and creds.refresh_token:
+    #            creds.refresh(Request())
+    #        else:
+    #            flow = InstalledAppFlow.from_client_secrets_file(
+    #                'credentials.json', SCOPES)
+    #            creds = flow.run_local_server(prompt="select_account")
+    #            # trying to use parameter prompt="select_account"
+    #        # Save the credentials for the next run
+    #        with open('token.pickle', 'wb') as token:
+    #            pickle.dump(creds, token)
     context = {
     }
     return render(request, 'pages/homepage.html', context)
@@ -77,20 +84,46 @@ def login(request):
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
+    # trying to create token.pickle without logging in
+    if not os.path.exists('token.pickle'):
+        print("no token.pickle")
+        flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
-            creds = flow.run_local_server()
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
+        flow.redirect_uri = 'http://{}:{}/'.format('localhost', 8080)
+        auth_url, _ = flow.authorization_url()
+        success_message = "you can close the tab"
+        wsgi_app = _RedirectWSGIApp(success_message)
+        local_server = wsgiref.simple_server.make_server(
+            'localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler)
+        print("made it past local_server")
+        if True:
+            webbrowser.open(auth_url, new=1, autoraise=True) # this is where it opens
+        authorization_prompt_message = "You can open it at"
+        print("auth url:", auth_url)
+        local_server.handle_request() #sends get http
+        authorization_response = wsgi_app.last_request_uri.replace(
+            'http', 'https') #now reading you can close the tab
+        print ("response url:", authorization_response) 
+        flow.fetch_token(authorization_response=authorization_response)
+        cred= flow.credentials
+        print("cred:", cred)
+    else:
+        print("token.pickle exists")
+        print("don't do anything more")
+#    if os.path.exists('token.pickle'):
+#        with open('token.pickle', 'rb') as token:
+#            creds = pickle.load(token)
+#    # If there are no (valid) credentials available, let the user log in.
+#    if not creds or not creds.valid:
+#        if creds and creds.expired and creds.refresh_token:
+#            creds.refresh(Request())
+#        else:
+#            flow = InstalledAppFlow.from_client_secrets_file(
+#                'credentials.json', SCOPES)
+#            creds = flow.run_local_server()
+#        # Save the credentials for the next run
+#        with open('token.pickle', 'wb') as token:
+#            pickle.dump(creds, token)
     context={
     }
     return render(request, 'pages/login.html', context)
@@ -122,6 +155,7 @@ def new_med(request):
             refillevent.save()
             
             # Write the form's info into an event on their google calendar
+            # if token.pickle exists, don't need rest of login
             if os.path.exists('token.pickle'):
                 with open('token.pickle', 'rb') as token:
                     creds = pickle.load(token)
