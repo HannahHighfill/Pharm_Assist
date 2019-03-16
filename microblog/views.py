@@ -41,33 +41,37 @@ class RefillEvent(forms.ModelForm):
     class Meta:
         model = RefillEvent
         fields = ['summary', 'location', 'description', 'startdatetime', 'enddatetime']
+# the fields will change after we figure out how to auto-populate the event dictionary
 
 
+# This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
+#currently the homepage logs a user in or says hello to them
 def homepage(request):
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request
-        form = NewUserForm(request.POST)
-
-        if form.is_valid():
-            # Create a new user object using the ModelForm's built-in .save()
-            # giving it from the cleaned_data form.
-            user = form.save()
-
-            # As soon as our new user is created, we make this user be
-            # instantly "logged in".
-            auth.login(request, user)
-            return redirect('/')
-
-    else:
-        # if a GET we'll create a blank form
-        form = NewUserForm()
-
+    creds = None
+    # The file token.pickle stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server()
+        # Save the credentials for the next run
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
     context = {
-        'form': form,
     }
     return render(request, 'pages/homepage.html', context)
 
+
+
+# I do not know if we need this page, given that logging in is happening through google and not through us
 def login(request):
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -91,16 +95,21 @@ def login(request):
     }
     return render(request, 'pages/login.html', context)
 
+
+# currently the only way to logout is to go to '/logout' and it will do it for you
 def logout(request):
     auth_logout(request)
     return redirect(request.META.get('HTTP_REFERER', '/'))
     
+    
+#this does not need to be its own page, Jamie just seperated it out so you guys can find all the essential html and code to make the calendar show
 def calendar(request):
             context={
                 'username':request.user.username 
             }
             return render(request, 'pages/calendar.html', context)
 
+# This page displays the new med form, sends it to the database, and writes the calendar event for the new med
 def new_med(request):
     if request.method == 'POST':
 
@@ -111,6 +120,8 @@ def new_med(request):
             refillevent = form.save(commit=False)
             refillevent.user_id = request.user.id
             refillevent.save()
+            
+            # Write the form's info into an event on their google calendar
             if os.path.exists('token.pickle'):
                 with open('token.pickle', 'rb') as token:
                     creds = pickle.load(token)
@@ -134,7 +145,7 @@ def new_med(request):
 
                     event = service.events().insert(calendarId='primary', body=event).execute()
                     print ('Event created: %s' % (event.get('htmlLink')))
-            return redirect('/')
+            return redirect('/') # Currently redirects to homepage
 
     else:
         # if a GET we'll create a blank form
