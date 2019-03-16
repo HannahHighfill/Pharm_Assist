@@ -4,7 +4,6 @@ from datetime import timedelta
 import pickle
 import os.path
 from googleapiclient.discovery import build
-
 from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth.models import User
@@ -12,7 +11,6 @@ from django.contrib import auth
 from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
-
 
 from .models import Tweet
 from .models import RefillEvent
@@ -47,6 +45,7 @@ class RefillEvent(forms.ModelForm):
 # This homepage can end up hosting the calendar, Jamie just put them on separate pages so the info would be easy to find
 # currently the homepage logs a user in or says hello to them
 def homepage(request):
+    #this re-writes the pickle file with the user's credentials
     if request.user.is_authenticated:
         social = request.user.social_auth.get(provider='google-oauth2')
         a_token= social.extra_data['access_token']
@@ -108,25 +107,21 @@ def new_med(request):
             refillevent.save()
             
             # Write the form's info into an event on their google calendar
-            # if token.pickle exists, don't need rest of login
+            # if token.pickle exists, load credentials from it
             if os.path.exists('token.pickle'):
                 with open('token.pickle', 'rb') as token:
                     creds = pickle.load(token)
-                            #why are these two different? top works, bottom doesnt
-                    ectory = dir(creds)
-                    print("ectory:", ectory)
-                    tip = type(creds)
-                    print("tip", tip)
-                    rt = creds._refresh_token
-                    print("rt", rt)
-                    ex = creds.expired
-                    print("ex", ex)
-                    sc = creds.scopes
-                    print("sc", sc)
-                    #creds= credentials.Credentials.from_authorized_user_file('gmail_credentials.json')
-#                    creds= credentials.Credentials("ya29.GlvOBvh4638awy7D9jzYKYZdtswGY0rBUyOv1qzkbZIs644EYHeCjteGc5XhM3YGzX8BHKhlVZkD0HBWCqC0bg69A1vhBc2ukc6O6wtFcLWlnOY8FOyL1fapC9PY", refresh_token=None, id_token=None, token_uri="https://oauth2.googleapis.com/token", client_id="356344142805-ls9g1o0l1m422c5c6880o43o270k6j07.apps.googleusercontent.com", client_secret="jXESXJ-9MqJRM1FGbOr_Qyf1", scopes=["https://www.googleapis.com/auth/calendar.events"])
-                    #creds.refresh(Request()) #makes same error
-                    print("creds", creds)
+                    ectory = dir(creds) #
+                    print("ectory:", ectory) #
+                    tip = type(creds) #
+                    print("tip", tip) #
+                    rt = creds._refresh_token #
+                    print("rt", rt) #
+                    ex = creds.expired #
+                    print("ex", ex) #
+                    sc = creds.scopes #
+                    print("sc", sc) #
+                    print("creds", creds) #
                     service = build('calendar', 'v3', credentials=creds)
 
         # Hannah- instead of this hard-coded event, you need to write code that takes the data from the RefillEvent model (the table in SQLite), sorts it by the user's ID, checks if it is unwritten, populates an event dictionary, writes the event, and marks the event as written. This needs to happen for each unwritten event of the logged in user
