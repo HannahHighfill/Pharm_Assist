@@ -33,7 +33,7 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['text', 'image']
+        fields = ['Prescription', 'Nickname', 'Pharmacy', 'Date']
         
 class RefillEvent(forms.ModelForm):
     class Meta:
