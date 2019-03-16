@@ -58,6 +58,8 @@ def homepage(request):
         social = request.user.social_auth.get(provider='google-oauth2')
         a_token= social.extra_data['access_token']
         print("a token :", a_token)
+        r_token= social.extra_data['refresh_token']
+        print("r token :", r_token)
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
@@ -65,6 +67,8 @@ def homepage(request):
                 
                 creds.token =  a_token #these are not interchangable
                 print ("changed creds token:", creds.token)
+                creds._refresh_token = r_token
+                print ("creds new refresh token is:", creds.refresh_token)
                 
                 if not creds or not creds.valid:
                     if creds and creds.expired and creds.refresh_token:
