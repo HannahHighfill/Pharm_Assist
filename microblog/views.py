@@ -48,27 +48,26 @@ class RefillEvent(forms.ModelForm):
     class Meta:
         model = RefillEvent
         fields = ['summary', 'location', 'description', 'startdatetime', 'enddatetime']
-# the fields will change after we figure out how to auto-populate the event dictionary
+    # the fields will change after we figure out how to auto-populate the event dictionary
 
 
-# This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
-#currently the homepage logs a user in or says hello to them
+# This homepage can end up hosting the calendar, Jamie just put them on separate pages so the info would be easy to find
+# currently the homepage logs a user in or says hello to them
 def homepage(request):
     if request.user.is_authenticated:
         social = request.user.social_auth.get(provider='google-oauth2')
         a_token= social.extra_data['access_token']
-        print("a token :", a_token)
+        print("a token :", a_token) #
         r_token= social.extra_data['refresh_token']
-        print("r token :", r_token)
+        print("r token :", r_token) #
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
-                print ("creds token:", creds.token)
-                
+                print ("creds token:", creds.token) #
                 creds.token =  a_token #these are not interchangable
-                print ("changed creds token:", creds.token)
+                print ("changed creds token:", creds.token) #
                 creds._refresh_token = r_token
-                print ("creds new refresh token is:", creds.refresh_token)
+                print ("creds new refresh token is:", creds.refresh_token) #
                 
                 if not creds or not creds.valid:
                     if creds and creds.expired and creds.refresh_token:
@@ -76,41 +75,7 @@ def homepage(request):
                         print("creds refreshed") # haven't seen this run
                 with open('token.pickle', 'wb') as token:
                     pickle.dump(creds, token)
-                    print("pickle rewritten")
-                    
-                    
-                    
-#        path = os.path.abspath('gmail_credentials.json')
-#        with open(path,'r') as file:
-#            json_data = json.load(file)
-#            for item in json_data:
-#               if 'token'in json_data:
-#                  json_data['token'] = token
-#        with open(path, 'w') as file:
-#            json.dump(json_data, file, indent=2)
-#        print("success!")
-#none of this is necessary except to create token.pickle
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-#    if os.path.exists('token.pickle'):
-#        with open('token.pickle', 'rb') as token:
-#            creds = pickle.load(token)
-#            print(creds)
-#    # If there are no (valid) credentials available, let the user log in.
-#    if not creds or not creds.valid:
-#        if creds and creds.expired and creds.refresh_token:
-#            creds.refresh(Request())
-#        else:
-#            flow = InstalledAppFlow.from_client_secrets_file(
-#                'credentials.json', SCOPES)
-#            creds = flow.run_local_server(prompt="select_account")
-#            # trying to use parameter prompt="select_account"
-#        # Save the credentials for the next run
-#            print( creds)
-#        with open('token.pickle', 'wb') as token:
-#            pickle.dump(creds, token)
+                    print("pickle rewritten") #
     context = {
     }
     return render(request, 'pages/homepage.html', context)
@@ -119,53 +84,6 @@ def homepage(request):
 
 # I do not know if we need this page, given that logging in is happening through google and not through us
 def login(request):
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    # trying to create token.pickle without logging in
-    if not os.path.exists('token.pickle'):
-        print("no token.pickle")
-        flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-        flow.redirect_uri = 'http://{}:{}/'.format('localhost', 8080)
-        print("flow:", flow)
-        print("flow:", flow.redirect_uri)
-        auth_url, _ = flow.authorization_url() #yes
-        success_message = "you can close the tab" #yes need something
-        wsgi_app = _RedirectWSGIApp(success_message) #yes, just passes flow.redirect_uri through. needs to be formatted as url
-        print("wsgi_app:", wsgi_app)
-        local_server = wsgiref.simple_server.make_server(
-            'localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler) #no
-        print("made it past local_server")
-        if True:
-            webbrowser.open(auth_url, new=1, autoraise=True) # this is where it opens #no?
-        authorization_prompt_message = "You can open it at" #no
-        print("auth url:", auth_url)
-        local_server.handle_request() #sends get http #no
-        authorization_response = wsgi_app.last_request_uri.replace(
-            'http', 'https') #yes 
-        print ("response url:", authorization_response) # no
-        flow.fetch_token(authorization_response=authorization_response) #yes
-        cred= flow.credentials #yes
-        print("cred:", cred) #no
-    else:
-        print("token.pickle exists")
-        print("don't do anything more")
-#    if os.path.exists('token.pickle'):
-#        with open('token.pickle', 'rb') as token:
-#            creds = pickle.load(token)
-#    # If there are no (valid) credentials available, let the user log in.
-#    if not creds or not creds.valid:
-#        if creds and creds.expired and creds.refresh_token:
-#            creds.refresh(Request())
-#        else:
-#            flow = InstalledAppFlow.from_client_secrets_file(
-#                'credentials.json', SCOPES)
-#            creds = flow.run_local_server()
-#        # Save the credentials for the next run
-#        with open('token.pickle', 'wb') as token:
-#            pickle.dump(creds, token)
     context={
     }
     return render(request, 'pages/login.html', context)
