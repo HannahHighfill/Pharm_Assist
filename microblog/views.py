@@ -3,14 +3,7 @@ import datetime
 from datetime import timedelta
 import pickle
 import os.path
-import wsgiref
-import webbrowser
-import json
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google_auth_oauthlib.flow import _RedirectWSGIApp, _WSGIRequestHandler
-from wsgiref.simple_server import make_server
-from google.auth.transport.requests import Request # All from google api example
 
 from django.shortcuts import render, redirect
 from django import forms
