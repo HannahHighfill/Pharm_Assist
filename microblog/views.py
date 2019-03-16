@@ -56,7 +56,7 @@ def homepage(request):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
                 print ("creds token:", creds.token) #
-                creds.token =  a_token #these are not interchangable
+                creds.token =  a_token #these are not necessarily the same
                 print ("changed creds token:", creds.token) #
                 creds._refresh_token = r_token
                 print ("creds new refresh token is:", creds.refresh_token) #
@@ -97,17 +97,15 @@ def calendar(request):
 # This page displays the new med form, sends it to the database, and writes the calendar event for the new med
 def new_med(request):
     if request.method == 'POST':
-
         # Create a form instance and populate it with data from the request
         form = RefillEvent(request.POST)
-
         if form.is_valid():
             refillevent = form.save(commit=False)
             refillevent.user_id = request.user.id
             refillevent.save()
             
-            # Write the form's info into an event on their google calendar
-            # if token.pickle exists, load credentials from it
+        # Write the form's info into an event on their google calendar
+            # load credential from token.pickle and build calendar api
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
                 rt = creds._refresh_token #
@@ -118,7 +116,8 @@ def new_med(request):
                 service = build('calendar', 'v3', credentials=creds)
 
         # Hannah- instead of this hard-coded event, you need to write code that takes the data from the RefillEvent model (the table in SQLite), sorts it by the user's ID, checks if it is unwritten, populates an event dictionary, writes the event, and marks the event as written. This needs to happen for each unwritten event of the logged in user
-                event = { #the event dictionary will look like this, just with the user's info
+                event = { 
+                #the event dictionary will look like this, just with the user's info
           'summary': 'Google I/O 2015',
           'location': '800 Howard St., San Francisco, CA 94103',
           'description': 'A chance to hear more about Google\'s developer products.',
@@ -131,15 +130,15 @@ def new_med(request):
             'timeZone': 'America/Los_Angeles',
           }, #there are more fields that can be added
                 }
-
-                event = service.events().insert(calendarId='primary', body=event).execute()
+                # creates and pushes the refill event
+                event = service.events().insert(
+                            calendarId='primary', body=event).execute()
                 print ('Event created: %s' % (event.get('htmlLink')))
             return redirect('/') # Currently redirects to homepage
 
     else:
         # if a GET we'll create a blank form
         form = RefillEvent()
-
     context = {
         'form': form,
     }
