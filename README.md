@@ -1,5 +1,5 @@
-# Pharm-assist #
-**Description:** Pharm-assist integrates with your Google Calendar, adding prescription reminders through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, and choose how far in advance you'd like to get a reminder. Choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. With Pharm-assist you have an easy-to-reach list of your prescription refills and your reminders are integrated into how you already use calendars.
+# Pharmassist #
+**Description:** Pharmassist integrates with your Google Calendar, adding prescription reminders through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, and choose how far in advance you'd like to get a reminder. Choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. With Pharmassist you have an easy-to-reach list of your prescription refills and your reminders are integrated into how you already use calendars.
 
 **Heroku App**
 http://pharm-assist-refills.herokuapp.com
@@ -21,7 +21,7 @@ We will start from the Twitten class activity because it has functionality and s
 * Since a logo is offered for each "tweet" (which will become prescriptions) we could offer users the ability to add an image correlation on their calendars, similar to the nickname idea this would mean their prescriptions are kept private on calendar but recognizable for them
 
 **Expected challenges**
-The Google Calendar API has some unknown so we will see how difficult that is. We are also not sure if we will need separate signins for Google and for Pharm-assist. The pages we are hoping to make are modest, so hopefully no unforeseen issues there.
+The Google Calendar API has some unknown so we will see how difficult that is. We are also not sure if we will need separate signins for Google and for Pharmassist. The pages we are hoping to make are modest, so hopefully no unforeseen issues there.
 
 # Site #
 https://hannahhighfill.github.io/Pharm_Assist/
@@ -45,7 +45,7 @@ https://hannahhighfill.github.io/Pharm_Assist/
 **Pages**
 1. Landing Page: 
   * Sign into your Google account for OAuth
-  * (?) create Pharm-assist account
+  * (?) create Pharmassist account
 2. Landing Page: Sign into Google to display your calendar
 3. Add Prescription Page with form:
   * Nickname of prescription

@@ -1,4 +1,4 @@
-"""twitten URL Configuration
+"""pharmassist URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
@@ -23,11 +23,11 @@ from microblog import views
 
 urlpatterns = [
     path('', views.homepage, name='home'),
-    path('all-tweets/', views.view_all_tweets, name="all_tweets"),
+    path('all-refills/', views.view_all_refills, name="all_refills"),
     path('users/<username>/', views.user_page, name="user_page"),
     path('users/<username>/edit-profile/', views.edit_user_profile),
-    path('update-tweet/<tweet_id>/', views.update_tweet),
-    path('delete-tweet/<tweet_id>/', views.delete_tweet),
+    path('update-refill/<refill_id>/', views.update_refill),
+    path('delete-refill/<refill_id>/', views.delete_refill),
     path('admin/', admin.site.urls),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
