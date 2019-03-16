@@ -96,60 +96,6 @@ def logout(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
     
 def calendar(request):
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
-    """
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-
-            service = build('calendar', 'v3', credentials=creds)
-
-            # Call the Calendar API
-            now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-            event = {
-  'summary': 'Google I/O 2015',
-  'location': '800 Howard St., San Francisco, CA 94103',
-  'description': 'A chance to hear more about Google\'s developer products.',
-  'start': {
-    'dateTime': '2019-03-15T09:00:00-07:00',
-    'timeZone': 'America/Los_Angeles',
-  },
-  'end': {
-    'dateTime': '2019-03-15T17:00:00-07:00',
-    'timeZone': 'America/Los_Angeles',
-  },
-#  'recurrence': [
-#    'RRULE:FREQ=DAILY;COUNT=2'
-#  ],
-#  'attendees': [
-#    {'email': 'lpage@example.com'},
-#    {'email': 'sbrin@example.com'},
-#  ],
-#  'reminders': {
-#    'useDefault': False,
-#    'overrides': [
-#      {'method': 'email', 'minutes': 24 * 60},
-#      {'method': 'popup', 'minutes': 10},
-#    ],
-#  },
-# we can add these commented out fields later. no need to for testing right now
-            }
-
-            event = service.events().insert(calendarId='primary', body=event).execute()
-            print ('Event created: %s' % (event.get('htmlLink')))
-            print('Getting the upcoming 10 events')
-            events_result = service.events().list(calendarId='primary', timeMin=now,
-                                                maxResults=10, singleEvents=True,
-                                                orderBy='startTime').execute()
-            events = events_result.get('items', [])
-            #print(events) --> list with dictionaries
-            if not events:
-                print('No upcoming events found.')
-            for event in events:
-                start = event['start'].get('dateTime', event['start'].get('date'))
-                print(start, event['summary'])
-                
             context={
                 'username':request.user.username 
             }
@@ -163,9 +109,31 @@ def new_med(request):
 
         if form.is_valid():
             refillevent = form.save(commit=False)
-            refillevent.username = request.user.username
+            refillevent.user_id = request.user.id
             refillevent.save()
+            if os.path.exists('token.pickle'):
+                with open('token.pickle', 'rb') as token:
+                    creds = pickle.load(token)
 
+                    service = build('calendar', 'v3', credentials=creds)
+
+        # Hannah- instead of this hard-coded event, you need to write code that takes the data from the RefillEvent model (the table in SQLite), sorts it by the user's ID, checks if it is unwritten, populates an event dictionary, writes the event, and marks the event as written. This needs to happen for each unwritten event of the logged in user
+                    event = { #the event dictionary will look like this, just with the user's info
+          'summary': 'Google I/O 2015',
+          'location': '800 Howard St., San Francisco, CA 94103',
+          'description': 'A chance to hear more about Google\'s developer products.',
+          'start': {
+            'dateTime': '2019-03-17T09:00:00-07:00',
+            'timeZone': 'America/Los_Angeles',
+          },
+          'end': {
+            'dateTime': '2019-03-17T17:00:00-07:00',
+            'timeZone': 'America/Los_Angeles',
+          }, #there are more fields that can be added
+                    }
+
+                    event = service.events().insert(calendarId='primary', body=event).execute()
+                    print ('Event created: %s' % (event.get('htmlLink')))
             return redirect('/')
 
     else:

@@ -42,8 +42,9 @@ class RefillEvent(models.Model):
     location = models.CharField(max_length=160)
     description = models.TextField()
     startdatetime = models.DateTimeField()
-    timezone = 'America/Los_Angeles'
+    timezone = models.CharField(max_length=160, default='America/Los_Angeles')
     enddatetime = models.DateTimeField()
+    postedtocalendar = models.BooleanField(default=False)
 #    recurrence = 'RRULE:FREQ=DAILY;COUNT=2'
 #    reminder = models.BooleanField()
 # This will create a table in sqlite. make a form from it. use the form to populate an event variable. the calendar views adds that event to the calendar
