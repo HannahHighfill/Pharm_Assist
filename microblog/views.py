@@ -25,6 +25,7 @@ from .models import Tweet
 from .models import RefillEvent
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'approval_prompt':'force' } #maybe
 
 
 class NewUserForm(forms.ModelForm):
@@ -68,26 +69,27 @@ def homepage(request):
             json.dump(json_data, file, indent=2)
         print("success!")
 #none of this is necessary except to create token.pickle
-#    creds = None
-#    # The file token.pickle stores the user's access and refresh tokens, and is
-#    # created automatically when the authorization flow completes for the first
-#    # time.
-#    if os.path.exists('token.pickle'):
-#        with open('token.pickle', 'rb') as token:
-#            creds = pickle.load(token)
-#            print(creds)
-#    # If there are no (valid) credentials available, let the user log in.
-#    if not creds or not creds.valid:
-#        if creds and creds.expired and creds.refresh_token:
-#            creds.refresh(Request())
-#        else:
-#            flow = InstalledAppFlow.from_client_secrets_file(
-#                'credentials.json', SCOPES)
-#            creds = flow.run_local_server(prompt="select_account")
-#            # trying to use parameter prompt="select_account"
-#        # Save the credentials for the next run
-#        with open('token.pickle', 'wb') as token:
-#            pickle.dump(creds, token)
+    creds = None
+    # The file token.pickle stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+            print(creds)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(prompt="select_account")
+            # trying to use parameter prompt="select_account"
+        # Save the credentials for the next run
+            print( creds)
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
     context = {
     }
     return render(request, 'pages/homepage.html', context)
@@ -177,10 +179,22 @@ def new_med(request):
             # if token.pickle exists, don't need rest of login
             if os.path.exists('token.pickle'):
                 with open('token.pickle', 'rb') as token:
-                    #creds = pickle.load(token)
-
-                    creds= credentials.Credentials.from_authorized_user_file('gmail_credentials.json')
-
+                    creds = pickle.load(token)
+                            #why are these two different? top works, bottom doesnt
+                    ectory = dir(creds)
+                    print("ectory:", ectory)
+                    tip = type(creds)
+                    print("tip", tip)
+                    rt = creds._refresh_token
+                    print("rt", rt)
+                    ex = creds.expired
+                    print("ex", ex)
+                    sc = creds.scopes
+                    print("sc", sc)
+                    #creds= credentials.Credentials.from_authorized_user_file('gmail_credentials.json')
+#                    creds= credentials.Credentials("ya29.GlvOBvh4638awy7D9jzYKYZdtswGY0rBUyOv1qzkbZIs644EYHeCjteGc5XhM3YGzX8BHKhlVZkD0HBWCqC0bg69A1vhBc2ukc6O6wtFcLWlnOY8FOyL1fapC9PY", refresh_token=None, id_token=None, token_uri="https://oauth2.googleapis.com/token", client_id="356344142805-ls9g1o0l1m422c5c6880o43o270k6j07.apps.googleusercontent.com", client_secret="jXESXJ-9MqJRM1FGbOr_Qyf1", scopes=["https://www.googleapis.com/auth/calendar.events"])
+                    #creds.refresh(Request()) #makes same error
+                    print("creds", creds)
                     service = build('calendar', 'v3', credentials=creds)
 
         # Hannah- instead of this hard-coded event, you need to write code that takes the data from the RefillEvent model (the table in SQLite), sorts it by the user's ID, checks if it is unwritten, populates an event dictionary, writes the event, and marks the event as written. This needs to happen for each unwritten event of the logged in user
