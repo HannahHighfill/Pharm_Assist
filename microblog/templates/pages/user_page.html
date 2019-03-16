@@ -20,10 +20,10 @@
                 <form enctype="multipart/form-data" method="post" action=".">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button class="btn btn-lg btn-info">Tweet</button>
+                    <button class="btn btn-lg btn-info">Refill</button>
                 </form>
             {% endif %}
-            {% include "snippets/tweets.html" %}
+            {% include "snippets/refills.html" %}
         </div>
     </div>
 </div>

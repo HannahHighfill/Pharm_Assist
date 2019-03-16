@@ -26,8 +26,8 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AddField(
-            model_name='tweet',
+            model_name='refill',
             name='liked',
-            field=models.ManyToManyField(related_name='liked_tweets', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(related_name='liked_refills', to=settings.AUTH_USER_MODEL),
         ),
     ]

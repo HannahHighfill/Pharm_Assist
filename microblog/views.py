@@ -12,7 +12,7 @@ from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
 
-from .models import Tweet
+from .models import Refill
 from .models import RefillEvent
 
 
@@ -30,9 +30,9 @@ class EditUserForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email']
 
 
-class TweetForm(forms.ModelForm):
+class RefillForm(forms.ModelForm):
     class Meta:
-        model = Tweet
+        model = Refill
         fields = ['text', 'image']
         
 class RefillEvent(forms.ModelForm):
@@ -144,44 +144,44 @@ def new_med(request):
     }
     return render(request, 'pages/new_med.html', context)
 
-def view_all_tweets(request):
-    tweets = Tweet.objects.order_by('-created')
+def view_all_refills(request):
+    refills = Refill.objects.order_by('-created')
     context = {
-        'tweets': tweets,
+        'refills': refills,
     }
-    return render(request, 'pages/all_tweets.html', context)
+    return render(request, 'pages/all_refills.html', context)
 
 
 def user_page(request, username):
-    # CREATE tweets
+    # CREATE refills
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request,
         # including uploaded files
-        form = TweetForm(request.POST, request.FILES)
+        form = RefillForm(request.POST, request.FILES)
 
         if form.is_valid():
             # Use the form to save
-            tweet = form.save(commit=False)
-            tweet.username = request.user.username
-            tweet.save()
+            refill = form.save(commit=False)
+            refill.username = request.user.username
+            refill.save()
             # Cool trick to redirect to the previous page
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
     else:
         # if a GET we'll create a blank form
-        form = TweetForm()
+        form = RefillForm()
 
     user = User.objects.get(username=username)
 
-    # READ tweets and User information from database
+    # READ refills and User information from database
     # We can break down complicated filtering of "querysets" into multiple
     # lines like this
-    tweets = Tweet.objects.order_by('-created')
-    tweets_by_user = tweets.filter(username=username)
+    refills = Refill.objects.order_by('-created')
+    refills_by_user = refills.filter(username=username)
 
     context = {
-        'tweets': tweets_by_user,
+        'refills': refills_by_user,
         'form': form,
         'user_on_page': user,
         'is_me': user == request.user,
@@ -190,22 +190,22 @@ def user_page(request, username):
 
 
 
-def delete_tweet(request, tweet_id):
-    tweet = Tweet.objects.get(id=tweet_id)
-    tweet.delete()
+def delete_refill(request, refill_id):
+    refill = Refill.objects.get(id=refill_id)
+    refill.delete()
 
     # Redirect to wherever they came from
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
-def update_tweet(request, tweet_id):
+def update_refill(request, refill_id):
     text = request.POST['text']
 
-    # Update the tweet
-    tweet = Tweet.objects.get(id=tweet_id)
-    tweet.text = text
-    tweet.save()
+    # Update the refill
+    refill = Refill.objects.get(id=refill_id)
+    refill.text = text
+    refill.save()
 
     # Redirect to wherever they came from
     return redirect(request.META.get('HTTP_REFERER', '/'))
