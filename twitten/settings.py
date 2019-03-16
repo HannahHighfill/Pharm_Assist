@@ -87,7 +87,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar.events']
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'approval_prompt':'force' } #maybe. where doe these go? in views?
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'prompt': 'select_account' } #yeeeessss
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
