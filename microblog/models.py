@@ -38,12 +38,12 @@ class RefillEvent(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    summary = models.CharField(max_length=160)
-    location = models.CharField(max_length=160)
-    description = models.TextField()
-    startdatetime = models.DateTimeField()
+    # Added Refill form fields from views.py: 'Prescription', 'Nickname', 'Pharmacy', 'Date'
+    Prescription = models.CharField(max_length=160)
+    Nickname = models.CharField(max_length=160)
+    Pharmacy = models.TextField()
+    Date = models.DateTimeField()
     timezone = models.CharField(max_length=160, default='America/Los_Angeles')
-    enddatetime = models.DateTimeField()
     postedtocalendar = models.BooleanField(default=False)
 #    recurrence = 'RRULE:FREQ=DAILY;COUNT=2'
 #    reminder = models.BooleanField()
