@@ -3,6 +3,7 @@ import datetime
 from datetime import timedelta
 import pickle
 import os.path
+import requests
 from googleapiclient.discovery import build
 from django.shortcuts import render, redirect
 from django import forms
@@ -63,8 +64,8 @@ def homepage(request):
                 
                 if not creds or not creds.valid:
                     if creds and creds.expired and creds.refresh_token:
-                        creds.refresh(Request())
-                        print("creds refreshed") # haven't seen this run
+                        #creds.refresh(Request()) #it broke right here
+                        print("creds not refreshed") # haven't seen this run
                 with open('token.pickle', 'wb') as token:
                     pickle.dump(creds, token)
                     print("pickle rewritten") #
