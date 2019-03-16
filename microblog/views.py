@@ -24,8 +24,7 @@ from google.oauth2.credentials import Credentials
 from .models import Tweet
 from .models import RefillEvent
 
-SCOPES = ['https://www.googleapis.com/auth/calendar.events']
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'approval_prompt':'force' } #maybe
+
 
 
 class NewUserForm(forms.ModelForm):
@@ -57,39 +56,57 @@ class RefillEvent(forms.ModelForm):
 def homepage(request):
     if request.user.is_authenticated:
         social = request.user.social_auth.get(provider='google-oauth2')
-        token= social.extra_data['access_token']
-        print(token)
-        path = os.path.abspath('gmail_credentials.json')
-        with open(path,'r') as file:
-            json_data = json.load(file)
-            for item in json_data:
-               if 'token'in json_data:
-                  json_data['token'] = token
-        with open(path, 'w') as file:
-            json.dump(json_data, file, indent=2)
-        print("success!")
+        a_token= social.extra_data['access_token']
+        print("a token :", a_token)
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+                print ("creds token:", creds.token)
+                
+                creds.token =  a_token #these are not interchangable
+                print ("changed creds token:", creds.token)
+                
+                if not creds or not creds.valid:
+                    if creds and creds.expired and creds.refresh_token:
+                        creds.refresh(Request())
+                        print("creds refreshed") # haven't seen this run
+                with open('token.pickle', 'wb') as token:
+                    pickle.dump(creds, token)
+                    print("pickle rewritten")
+                    
+                    
+                    
+#        path = os.path.abspath('gmail_credentials.json')
+#        with open(path,'r') as file:
+#            json_data = json.load(file)
+#            for item in json_data:
+#               if 'token'in json_data:
+#                  json_data['token'] = token
+#        with open(path, 'w') as file:
+#            json.dump(json_data, file, indent=2)
+#        print("success!")
 #none of this is necessary except to create token.pickle
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-            print(creds)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(prompt="select_account")
-            # trying to use parameter prompt="select_account"
-        # Save the credentials for the next run
-            print( creds)
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
+#    if os.path.exists('token.pickle'):
+#        with open('token.pickle', 'rb') as token:
+#            creds = pickle.load(token)
+#            print(creds)
+#    # If there are no (valid) credentials available, let the user log in.
+#    if not creds or not creds.valid:
+#        if creds and creds.expired and creds.refresh_token:
+#            creds.refresh(Request())
+#        else:
+#            flow = InstalledAppFlow.from_client_secrets_file(
+#                'credentials.json', SCOPES)
+#            creds = flow.run_local_server(prompt="select_account")
+#            # trying to use parameter prompt="select_account"
+#        # Save the credentials for the next run
+#            print( creds)
+#        with open('token.pickle', 'wb') as token:
+#            pickle.dump(creds, token)
     context = {
     }
     return render(request, 'pages/homepage.html', context)
