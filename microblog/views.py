@@ -1,6 +1,6 @@
 from __future__ import print_function
-import datetime
-from datetime import timedelta
+#import datetime
+#from datetime import timedelta
 import pickle
 import os.path
 import requests
@@ -34,12 +34,12 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['Prescription', 'Nickname', 'Pharmacy', 'Date']
+        fields = ['prescription', 'nickname', 'pharmacy', 'number']
         
 class RefillEvent(forms.ModelForm):
     class Meta:
         model = RefillEvent
-        fields = ['summary', 'location', 'description', 'startdatetime', 'enddatetime']
+        fields = ['prescription', 'nickname', 'pharmacy', 'number']
     # the fields will change after we figure out how to auto-populate the event dictionary
 
 
