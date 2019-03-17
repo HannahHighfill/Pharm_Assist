@@ -12,6 +12,7 @@ from django.contrib import auth
 from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
+from secret_settings import *
 
 from .models import Refill
 from .models import RefillEvent
