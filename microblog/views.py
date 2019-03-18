@@ -150,13 +150,21 @@ def login(request):
     with open('token.pickle', 'wb') as token:
         pickle.dump(creds, token)
 
-    service = build('calendar', 'v3', credentials=creds)
-    print(dir(service))
+#    service = build('calendar', 'v3', credentials=creds)
+#    print(dir(service))
+
+    people_service = build(serviceName='people', version='v1', credentials=creds)
+    print(dir(people_service))
         
     session = flow.authorized_session()
     print("c")
     profile_info = session.get('https://www.googleapis.com/userinfo/v2/me').json()
     print(profile_info)
+    print(profile_info['email'])
+    print(profile_info['name'])
+    user = User
+    user.name=profile_info['name']
+    user.email=profile_info['email']
     # {'name': '...',  'email': '...', ...}
     context={
     }
