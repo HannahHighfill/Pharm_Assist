@@ -56,88 +56,7 @@ class RefillEvent(forms.ModelForm):
 # This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
 #currently the homepage logs a user in or says hello to them
 def homepage(request):
-#    if request.user.is_authenticated:
-#        social = request.user.social_auth.get(provider='google-oauth2')
-#        a_token= social.extra_data['access_token']
-#        print("a token :", a_token)
-#        r_token= social.extra_data['refresh_token']
-#        print("r token :", r_token)
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-            print("refreshed creds")
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', 'https://www.googleapis.com/auth/calendar.events')
-            creds = flow.run_local_server()
-            print("read from credentials.json")
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-            print("wrote a pickle file")
-                    
-                    
-                    
-#        path = os.path.abspath('gmail_credentials.json')
-#        with open(path,'r') as file:
-#            json_data = json.load(file)
-#            for item in json_data:
-#               if 'token'in json_data:
-#                  json_data['token'] = token
-#        with open(path, 'w') as file:
-#            json.dump(json_data, file, indent=2)
-#        print("success!")
-#none of this is necessary except to create token.pickle
-    creds = None
-    # The file token.pickle stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-#    if os.path.exists('token.pickle'):
-#        with open('token.pickle', 'rb') as token:
-#            creds = pickle.load(token)
-#            print(creds)
-#    # If there are no (valid) credentials available, let the user log in.
-#    if not creds or not creds.valid:
-#        if creds and creds.expired and creds.refresh_token:
-#            creds.refresh(Request())
-#        else:
-#            flow = InstalledAppFlow.from_client_secrets_file(
-#                'credentials.json', SCOPES)
-#            creds = flow.run_local_server(prompt="select_account")
-#            # trying to use parameter prompt="select_account"
-#        # Save the credentials for the next run
-#            print( creds)
-#        with open('token.pickle', 'wb') as token:
-#            pickle.dump(creds, token)
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request
-        form = NewUserForm(request.POST)
-        print(type(request.POST))
-        if form.is_valid():
-            # Create a new user object using the ModelForm's built-in .save()
-            # giving it from the cleaned_data form.
-            user = form.save()
-
-            # As soon as our new user is created, we make this user be
-            # instantly "logged in".
-            auth.login(request.POST, user)
-            return redirect('/')
-
-    else:
-        # if a GET we'll create a blank form
-        form = NewUserForm()
-
     context = {
-        'form': form,
     }
     return render(request, 'pages/homepage.html', context)
 
@@ -145,66 +64,6 @@ def homepage(request):
 
 # I do not know if we need this page, given that logging in is happening through google and not through us
 def login(request):
-    flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-    flow.redirect_uri = 'http://{}:{}/'.format('localhost',8080)
-    print("flow:", flow)
-    print("flow:", flow.redirect_uri)
-    auth_url, _ = flow.authorization_url(prompt='consent', access_type="offline")
-    success_message = "you can close the tab" 
-    wsgi_app = _RedirectWSGIApp(success_message) 
-    print("wsgi_app:", wsgi_app)
-    local_server = wsgiref.simple_server.make_server(
-        'localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler) 
-    print("made it past local_server")
-    if True:
-        webbrowser.open(auth_url, new=1, autoraise=True)
-    authorization_prompt_message = "You can open it at" 
-    print("auth url:", auth_url)
-    local_server.handle_request() 
-    authorization_response = wsgi_app.last_request_uri.replace(
-        'http', 'https')
-    print ("response url:", authorization_response) 
-    flow.fetch_token(authorization_response=authorization_response) 
-    creds= flow.credentials 
-    print(dir(creds))
-    print(creds.id_token)
-    with open('token.pickle', 'wb') as token:
-        pickle.dump(creds, token)
-
-#    service = build('calendar', 'v3', credentials=creds)
-#    print(dir(service))
-
-    people_service = build(serviceName='people', version='v1', credentials=creds)
-    print(dir(people_service))
-        
-    session = flow.authorized_session()
-    print("c")
-    profile_info = session.get('https://www.googleapis.com/userinfo/v2/me').json()
-    print(profile_info)
-    print(profile_info['email'])
-    print(profile_info['name'])
-    #if user with that email already exists
-        #authenticate
-    #if user with that email does not exist
-        #create user using link as password
-        
-    email=profile_info['email']
-    username, google=email.split('@')
-    
-    #user = User.objects.create_user(profile_info['name'], profile_info['email'], "a")
-    user = authenticate(username=username, password="a")
-    print("got here")
-    print(user)
-    #if user is not None:
-    auth.login(request.GET,user)
-    print("logged in")
-#    else:
-#        user = authenticate(email=profile_info['email'], password=profile_info['link'])
-        
-    user = User
-    user.name=profile_info['name']
-    user.email=profile_info['email']
-    # {'name': '...',  'email': '...', ...}
     context={
     }
     return render(request, 'pages/login.html', context)
@@ -237,26 +96,34 @@ def new_med(request):
             
             # Write the form's info into an event on their google calendar
             # if token.pickle exists, don't need rest of login
-            if os.path.exists('token.pickle'):
-                with open('token.pickle', 'rb') as token:
-                    creds = pickle.load(token)
-                            #why are these two different? top works, bottom doesnt
-                    ectory = dir(creds)
-                    print("ectory:", ectory)
-                    tip = type(creds)
-                    print("tip", tip)
-                    rt = creds._refresh_token
-                    print("rt", rt)
-                    ex = creds.expired
-                    print("ex", ex)
-                    sc = creds.scopes
-                    print("sc", sc)
-                    #creds= credentials.Credentials.from_authorized_user_file('gmail_credentials.json')
-#                    creds= credentials.Credentials("ya29.GlvOBvh4638awy7D9jzYKYZdtswGY0rBUyOv1qzkbZIs644EYHeCjteGc5XhM3YGzX8BHKhlVZkD0HBWCqC0bg69A1vhBc2ukc6O6wtFcLWlnOY8FOyL1fapC9PY", refresh_token=None, id_token=None, token_uri="https://oauth2.googleapis.com/token", client_id="356344142805-ls9g1o0l1m422c5c6880o43o270k6j07.apps.googleusercontent.com", client_secret="jXESXJ-9MqJRM1FGbOr_Qyf1", scopes=["https://www.googleapis.com/auth/calendar.events"])
-                    #creds.refresh(Request()) #makes same error
-                    print("creds", creds)
-                    service = build('calendar', 'v3', credentials=creds)
-                event = { 
+#            if os.path.exists('token.pickle'):
+#                with open('token.pickle', 'rb') as token:
+#                    creds = pickle.load(token)
+#            else:
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            flow.redirect_uri = 'http://{}:{}/'.format('localhost',8080)
+            print("flow:", flow)
+            print("flow:", flow.redirect_uri)
+            auth_url, _ = flow.authorization_url(prompt='consent', access_type="offline")
+            success_message = "you can close the tab" 
+            wsgi_app = _RedirectWSGIApp(success_message) 
+            print("wsgi_app:", wsgi_app)
+            local_server = wsgiref.simple_server.make_server('localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler) 
+            print("made it past local_server")
+            if True:
+                webbrowser.open(auth_url, new=1, autoraise=True)
+            authorization_prompt_message = "You can open it at" 
+            print("auth url:", auth_url)
+            local_server.handle_request() 
+            authorization_response = wsgi_app.last_request_uri.replace('http', 'https')
+            print ("response url:", authorization_response) 
+            flow.fetch_token(authorization_response=authorization_response) 
+            creds= flow.credentials 
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+
+            service = build('calendar', 'v3', credentials=creds)
+            event = { 
                 #the event dictionary will look like this, just with the user's info
           'summary': 'Google I/O 2015',
           'location': '800 Howard St., San Francisco, CA 94103',
@@ -271,10 +138,10 @@ def new_med(request):
           }, #there are more fields that can be added
                 }
                 # creates and pushes the refill event
-                event = service.events().insert(
+            event = service.events().insert(
                             calendarId='primary', body=event).execute()
-                print ('Event created: %s' % (event.get('htmlLink')))
-            return redirect('/') # Currently redirects to homepage
+            print ('Event created: %s' % (event.get('htmlLink')))
+            return redirect('/calendar')
 
     else:
         # if a GET we'll create a blank form

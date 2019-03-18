@@ -69,8 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-#                'social_django.context_processors.backends',
-#                'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'pharmassist.wsgi.application'
 #)
 SCOPES = 'https://www.googleapis.com/auth/calendar.events'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar.events']
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline' } #yeeeessss , 'prompt': 'select_account'
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'prompt': 'select_account' } #yeeeessss , 'prompt': 'select_account'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

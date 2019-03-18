@@ -16,11 +16,7 @@
 	        {% else %}
                      <a class="lead" href="{% url 'login' %}">Log in</a>
 	        {% endif %}
-        <form action="." method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-lg btn-primary">Register</button>
-        </form>
+
     </div>
 </div>
 
