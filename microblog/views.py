@@ -20,6 +20,7 @@ from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
 import httplib2
+from django.contrib.auth import authenticate
 
 
 from .models import Refill
@@ -116,7 +117,27 @@ def homepage(request):
 #            print( creds)
 #        with open('token.pickle', 'wb') as token:
 #            pickle.dump(creds, token)
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request
+        form = NewUserForm(request.POST)
+        print(type(request.POST))
+        if form.is_valid():
+            # Create a new user object using the ModelForm's built-in .save()
+            # giving it from the cleaned_data form.
+            user = form.save()
+
+            # As soon as our new user is created, we make this user be
+            # instantly "logged in".
+            auth.login(request.POST, user)
+            return redirect('/')
+
+    else:
+        # if a GET we'll create a blank form
+        form = NewUserForm()
+
     context = {
+        'form': form,
     }
     return render(request, 'pages/homepage.html', context)
 
@@ -162,6 +183,24 @@ def login(request):
     print(profile_info)
     print(profile_info['email'])
     print(profile_info['name'])
+    #if user with that email already exists
+        #authenticate
+    #if user with that email does not exist
+        #create user using link as password
+        
+    email=profile_info['email']
+    username, google=email.split('@')
+    
+    #user = User.objects.create_user(profile_info['name'], profile_info['email'], "a")
+    user = authenticate(username=username, password="a")
+    print("got here")
+    print(user)
+    #if user is not None:
+    auth.login(request.GET,user)
+    print("logged in")
+#    else:
+#        user = authenticate(email=profile_info['email'], password=profile_info['link'])
+        
     user = User
     user.name=profile_info['name']
     user.email=profile_info['email']
