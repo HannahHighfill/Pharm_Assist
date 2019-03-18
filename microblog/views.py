@@ -19,13 +19,14 @@ from django.contrib import auth
 from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
+import httplib2
 
 
 from .models import Refill
 from .models import RefillEvent
 
 
-SCOPES = ["https://www.googleapis.com/auth/calendar.events"]
+SCOPES = ["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
 
 class NewUserForm(forms.ModelForm):
     class Meta:
@@ -144,9 +145,13 @@ def login(request):
     print ("response url:", authorization_response) 
     flow.fetch_token(authorization_response=authorization_response) 
     creds= flow.credentials 
+    print(dir(creds))
+    print(creds.id_token)
     with open('token.pickle', 'wb') as token:
         pickle.dump(creds, token)
-        
+
+    service = build('calendar', 'v3', credentials=creds)
+    print(dir(service))
         
     session = flow.authorized_session()
     print("c")

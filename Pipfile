@@ -13,6 +13,7 @@ requests = "*"
 gunicorn = "*"
 whitenoise = "*"
 dj-database-url = "*"
+httplib2 = "*"
 
 [requires]
 python_version = "3.6"
