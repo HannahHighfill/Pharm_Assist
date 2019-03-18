@@ -12,6 +12,8 @@ from django.contrib import auth
 from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow # added
+from google.auth.transport.requests import Request # added
 
 from .models import Refill
 from .models import RefillEvent
@@ -46,30 +48,27 @@ class RefillEvent(forms.ModelForm):
 # This homepage can end up hosting the calendar, Jamie just put them on separate pages so the info would be easy to find
 # currently the homepage logs a user in or says hello to them
 def homepage(request):
-    #this re-writes the pickle file with the user's credentials
-    if request.user.is_authenticated:
-        social = request.user.social_auth.get(provider='google-oauth2')
-        a_token= social.extra_data['access_token']
-        print("a token :", a_token) #
-        r_token= social.extra_data['refresh_token']
-        print("r token :", r_token) #
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-                print ("creds token:", creds.token) #
-                creds.token =  a_token #these are not necessarily the same
-                print ("changed creds token:", creds.token) #
-                creds._refresh_token = r_token
-                print ("creds new refresh token is:", creds.refresh_token) #
-                
-                if not creds or not creds.valid:
-                    if creds and creds.expired and creds.refresh_token:
-                        #creds.refresh(Request()) #it broke right here
-                        print("creds not refreshed") # haven't seen this run
-                with open('token.pickle', 'wb') as token:
-                    pickle.dump(creds, token)
-                    print("pickle rewritten") #
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request
+        form = NewUserForm(request.POST)
+
+        if form.is_valid():
+            # Create a new user object using the ModelForm's built-in .save()
+            # giving it from the cleaned_data form.
+            user = form.save()
+
+            # As soon as our new user is created, we make this user be
+            # instantly "logged in".
+            auth.login(request, user)
+            return redirect('/')
+
+    else:
+        # if a GET we'll create a blank form
+        form = NewUserForm()
+
     context = {
+        'form': form,
     }
     return render(request, 'pages/homepage.html', context)
 
