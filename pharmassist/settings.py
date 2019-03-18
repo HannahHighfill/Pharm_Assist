@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'pharmassist.wsgi.application'
 #    'social_core.pipeline.social_auth.load_extra_data',
 #    'social_core.pipeline.user.user_details',
 #)
-
+SCOPES = 'https://www.googleapis.com/auth/calendar.events'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar.events']
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'prompt': 'select_account' } #yeeeessss
 
