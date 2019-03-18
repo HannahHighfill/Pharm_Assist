@@ -27,7 +27,7 @@ from .models import Refill
 from .models import RefillEvent
 
 
-SCOPES = ["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
+SCOPES = ["https://www.googleapis.com/auth/calendar.events"] #, "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
 
 class NewUserForm(forms.ModelForm):
     class Meta:
