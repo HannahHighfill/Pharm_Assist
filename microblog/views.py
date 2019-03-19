@@ -1,10 +1,17 @@
 from __future__ import print_function
-#import datetime
-#from datetime import timedelta
+import datetime
+from datetime import timedelta
 import pickle
 import os.path
-import requests
+import wsgiref
+import webbrowser
+import json
 from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google_auth_oauthlib.flow import _RedirectWSGIApp, _WSGIRequestHandler
+from wsgiref.simple_server import make_server
+from google.auth.transport.requests import Request # All from google api example
+
 from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth.models import User
@@ -12,14 +19,15 @@ from django.contrib import auth
 from django.contrib.auth import logout as auth_logout
 from google.oauth2 import credentials
 from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow # added
-from google.auth.transport.requests import Request # added
+import httplib2
+from django.contrib.auth import authenticate
+
 
 from .models import Refill
 from .models import RefillEvent
 
 
-
+SCOPES = ["https://www.googleapis.com/auth/calendar.events"] #, "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
 
 class NewUserForm(forms.ModelForm):
     class Meta:
@@ -36,39 +44,19 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['prescription', 'nickname', 'pharmacy', 'number']
+        fields = ['prescription', 'nickname']
         
 class RefillEvent(forms.ModelForm):
     class Meta:
         model = RefillEvent
-        fields = ['prescription', 'nickname', 'pharmacy', 'number']
-    # the fields will change after we figure out how to auto-populate the event dictionary
+        fields = ['prescription', 'nickname']
+# the fields will change after we figure out how to auto-populate the event dictionary
 
 
-# This homepage can end up hosting the calendar, Jamie just put them on separate pages so the info would be easy to find
-# currently the homepage logs a user in or says hello to them
+# This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
+#currently the homepage logs a user in or says hello to them
 def homepage(request):
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request
-        form = NewUserForm(request.POST)
-
-        if form.is_valid():
-            # Create a new user object using the ModelForm's built-in .save()
-            # giving it from the cleaned_data form.
-            user = form.save()
-
-            # As soon as our new user is created, we make this user be
-            # instantly "logged in".
-            auth.login(request, user)
-            return redirect('/')
-
-    else:
-        # if a GET we'll create a blank form
-        form = NewUserForm()
-
     context = {
-        'form': form,
     }
     return render(request, 'pages/homepage.html', context)
 
@@ -97,26 +85,45 @@ def calendar(request):
 # This page displays the new med form, sends it to the database, and writes the calendar event for the new med
 def new_med(request):
     if request.method == 'POST':
+
         # Create a form instance and populate it with data from the request
         form = RefillEvent(request.POST)
+
         if form.is_valid():
             refillevent = form.save(commit=False)
             refillevent.user_id = request.user.id
             refillevent.save()
             
-        # Write the form's info into an event on their google calendar
-            # load credential from token.pickle and build calendar api
-            with open('token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-                rt = creds._refresh_token #
-                print("rt", rt) #
-                ex = creds.expired #
-                print("ex", ex) #
-                print("creds", creds) #
-                service = build('calendar', 'v3', credentials=creds)
+            # Write the form's info into an event on their google calendar
+            # if token.pickle exists, don't need rest of login
+#            if os.path.exists('token.pickle'):
+#                with open('token.pickle', 'rb') as token:
+#                    creds = pickle.load(token)
+#            else:
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            flow.redirect_uri = 'http://{}:{}/'.format('localhost',8080)
+            print("flow:", flow)
+            print("flow:", flow.redirect_uri)
+            auth_url, _ = flow.authorization_url(prompt='consent', access_type="offline")
+            success_message = "you can close the tab" 
+            wsgi_app = _RedirectWSGIApp(success_message) 
+            print("wsgi_app:", wsgi_app)
+            local_server = wsgiref.simple_server.make_server('localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler) 
+            print("made it past local_server")
+            if True:
+                webbrowser.open(auth_url, new=1, autoraise=True)
+            authorization_prompt_message = "You can open it at" 
+            print("auth url:", auth_url)
+            local_server.handle_request() 
+            authorization_response = wsgi_app.last_request_uri.replace('http', 'https')
+            print ("response url:", authorization_response) 
+            flow.fetch_token(authorization_response=authorization_response) 
+            creds= flow.credentials 
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
 
-        # Hannah- instead of this hard-coded event, you need to write code that takes the data from the RefillEvent model (the table in SQLite), sorts it by the user's ID, checks if it is unwritten, populates an event dictionary, writes the event, and marks the event as written. This needs to happen for each unwritten event of the logged in user
-                event = { 
+            service = build('calendar', 'v3', credentials=creds)
+            event = { 
                 #the event dictionary will look like this, just with the user's info
           'summary': 'Google I/O 2015',
           'location': '800 Howard St., San Francisco, CA 94103',
@@ -131,10 +138,10 @@ def new_med(request):
           }, #there are more fields that can be added
                 }
                 # creates and pushes the refill event
-                event = service.events().insert(
+            event = service.events().insert(
                             calendarId='primary', body=event).execute()
-                print ('Event created: %s' % (event.get('htmlLink')))
-            return redirect('/') # Currently redirects to homepage
+            print ('Event created: %s' % (event.get('htmlLink')))
+            return redirect('/calendar')
 
     else:
         # if a GET we'll create a blank form
