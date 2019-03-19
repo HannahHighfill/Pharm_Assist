@@ -10,10 +10,10 @@ class Refill(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    prescription = models.CharField(max_length=60)
-    nickname = models.CharField(max_length=60, null=True, blank=True)
-    pharmacy = models.CharField(max_length=240, null=True, blank=True)
-    refill_date = models.DateField(default=datetime.date.today)
+    prescription = models.CharField(max_length=60, help_text="RX Name")
+    nickname = models.CharField(max_length=60, null=True, blank=True, help_text="Optional: Name that will display on calendar event instead of RX Name", verbose_name='Medicine Nickname')
+    pharmacy = models.CharField(max_length=240, null=True, blank=True, help_text="Name and Location", verbose_name="Pharmacy for Refill")
+    refill_date = models.DateField(default=datetime.date.today, help_text="Next date to refill med")
 
         
 class RefillEvent(models.Model):

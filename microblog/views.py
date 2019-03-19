@@ -96,29 +96,29 @@ def new_med(request):
             
             # Write the form's info into an event on their google calendar
             # if token.pickle exists, don't need rest of login
-#            if os.path.exists('token.pickle'):
-#                with open('token.pickle', 'rb') as token:
-#                    creds = pickle.load(token)
-#            else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            flow.redirect_uri = 'http://{}:{}/'.format('localhost',8080)
-            print("flow:", flow)
-            print("flow:", flow.redirect_uri)
-            auth_url, _ = flow.authorization_url(prompt='consent', access_type="offline")
-            success_message = "you can close the tab" 
-            wsgi_app = _RedirectWSGIApp(success_message) 
-            print("wsgi_app:", wsgi_app)
-            local_server = wsgiref.simple_server.make_server('localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler) 
-            print("made it past local_server")
-            if True:
-                webbrowser.open(auth_url, new=1, autoraise=True)
-            authorization_prompt_message = "You can open it at" 
-            print("auth url:", auth_url)
-            local_server.handle_request() 
-            authorization_response = wsgi_app.last_request_uri.replace('http', 'https')
-            print ("response url:", authorization_response) 
-            flow.fetch_token(authorization_response=authorization_response) 
-            creds= flow.credentials 
+            if os.path.exists('token.pickle'):
+                with open('token.pickle', 'rb') as token:
+                    creds = pickle.load(token)
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+                flow.redirect_uri = 'http://{}:{}/'.format('localhost',8080)
+                print("flow:", flow)
+                print("flow:", flow.redirect_uri)
+                auth_url, _ = flow.authorization_url(prompt='consent', access_type="offline")
+                success_message = "you can close the tab" 
+                wsgi_app = _RedirectWSGIApp(success_message) 
+                print("wsgi_app:", wsgi_app)
+                local_server = wsgiref.simple_server.make_server('localhost', 8080, wsgi_app, handler_class=_WSGIRequestHandler) 
+                print("made it past local_server")
+                if True:
+                    webbrowser.open(auth_url, new=1, autoraise=True)
+                authorization_prompt_message = "You can open it at" 
+                print("auth url:", auth_url)
+                local_server.handle_request() 
+                authorization_response = wsgi_app.last_request_uri.replace('http', 'https')
+                print ("response url:", authorization_response) 
+                flow.fetch_token(authorization_response=authorization_response) 
+                creds= flow.credentials 
             with open('token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
 
