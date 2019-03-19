@@ -10,15 +10,13 @@
     </div>
     <div class="col">
         
+
 	        {% if user.is_authenticated %}
                      <p class="display-4">Hello, {{ user.username }}</p>
 	        {% else %}
-                    </div>
-                        <div class="col g-signin2" data-onsuccess="onSignIn" >
-                        <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
-                    </div>
+                     <a class="lead" href="{% url 'login' %}">Log in</a>
 	        {% endif %}
-        
+
     </div>
 </div>
 

@@ -44,6 +44,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Simplified static file serving.
+    # https://warehouse.python.org/project/whitenoise/
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -76,18 +79,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pharmassist.wsgi.application'
 
 # from https://python-social-auth.readthedocs.io/en/latest/pipeline.html
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-)
-
+#SOCIAL_AUTH_PIPELINE = (
+#    'social_core.pipeline.social_auth.social_details',
+#    'social_core.pipeline.social_auth.social_uid',
+#    'social_core.pipeline.social_auth.auth_allowed',
+#    'social_core.pipeline.social_auth.social_user',
+#    'social_core.pipeline.social_auth.associate_user',
+#    'social_core.pipeline.social_auth.load_extra_data',
+#    'social_core.pipeline.user.user_details',
+#)
+SCOPES = 'https://www.googleapis.com/auth/calendar.events'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/calendar.events']
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline', 'prompt': 'select_account' } #yeeeessss
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'access_type': 'offline'} #yeeeessss , 'prompt': 'select_account'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -148,8 +151,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'live-static-files', 'static-root') # https://devcenter.heroku.com/articles/django-assets
+STATIC_TMP = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+#https://github.com/kennethreitz/flango/issues/3
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+os.makedirs(STATIC_TMP, exist_ok=True)
+os.makedirs(STATIC_ROOT, exist_ok=True)
+
 
 # NOTE: We also needed to add this to specify where the downloads go
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
