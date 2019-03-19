@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 
 import hashlib
@@ -9,24 +10,11 @@ class Refill(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-    prescription = models.CharField(max_length=160)
-    nickname = models.CharField(max_length=160, null=True, blank=True)
-    pharmacy = models.CharField(max_length=160, null=True, blank=True)
-    number = models.PositiveIntegerField(default=0)
+    prescription = models.CharField(max_length=60)
+    nickname = models.CharField(max_length=60, null=True, blank=True)
+    pharmacy = models.CharField(max_length=240, null=True, blank=True)
+    refill_date = models.DateField(default=datetime.date.today)
 
-
-
-#    def get_gravatar(self):
-#        # This is the example code found online for Gravatar, which will
-#        # randomly generate avatars based on email (we'll use username in this
-#        # case).
-#        email = self.username
-#        encoded = hashlib.md5(email.encode('utf8')).hexdigest()
-#        gravatar_url = "http://www.gravatar.com/avatar/%s?d=identicon" % encoded
-#        return gravatar_url
-
-#    def __str__(self):
-#        return self.user.name + ' said ' + self.text
         
 class RefillEvent(models.Model):
     user = models.ForeignKey(

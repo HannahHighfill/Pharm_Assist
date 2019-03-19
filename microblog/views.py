@@ -44,7 +44,7 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['prescription', 'nickname']
+        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date']
         
 class RefillEvent(forms.ModelForm):
     class Meta:
@@ -87,12 +87,12 @@ def new_med(request):
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request
-        form = RefillEvent(request.POST)
+        form = RefillForm(request.POST)
 
         if form.is_valid():
-            refillevent = form.save(commit=False)
-            refillevent.user_id = request.user.id
-            refillevent.save()
+            refill = form.save(commit=False)
+            refill.user_id = request.user.id
+            refill.save()
             
             # Write the form's info into an event on their google calendar
             # if token.pickle exists, don't need rest of login
@@ -145,7 +145,7 @@ def new_med(request):
 
     else:
         # if a GET we'll create a blank form
-        form = RefillEvent()
+        form = RefillForm()
     context = {
         'form': form,
     }
