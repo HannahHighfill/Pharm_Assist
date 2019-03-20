@@ -44,13 +44,13 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date']
+        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date', "timezone", "refill_time", "all_day", "often", "repeats"]
         
 class RefillEvent(forms.ModelForm):
     class Meta:
         model = RefillEvent
         fields = ['prescription', 'nickname']
-# the fields will change after we figure out how to auto-populate the event dictionary
+# Jamie think we don't need this
 
 
 # This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
@@ -123,18 +123,30 @@ def new_med(request):
                 pickle.dump(creds, token)
 
             service = build('calendar', 'v3', credentials=creds)
+            #make date strings
+            date = str(refill.refill_date)
+            starttime = str(refill.refill_time)
+            hour =(datetime.datetime.combine(datetime.date(1,1,1),refill.refill_time) + timedelta(hours=1)).time()
+            endtime = str(hour)
+            tz = refill.timezone
+            startdatetime= date + 'T' +starttime +tz
+            enddatetime= date + 'T' +endtime +tz
+            if refill.all_day == 1:
+                startdatetime=None
+                enddatetime=None
+                
             event = { 
                 #the event dictionary will look like this, just with the user's info
           'summary': 'Google I/O 2015',
           'location': '800 Howard St., San Francisco, CA 94103',
           'description': 'A chance to hear more about Google\'s developer products.',
           'start': {
-            'dateTime': '2019-03-17T09:00:00-07:00',
-            'timeZone': 'America/Los_Angeles',
+            "date": date,
+            'dateTime': startdatetime,
           },
           'end': {
-            'dateTime': '2019-03-17T17:00:00-07:00',
-            'timeZone': 'America/Los_Angeles',
+            "date": date,
+            'dateTime': enddatetime,
           }, #there are more fields that can be added
                 }
                 # creates and pushes the refill event
@@ -151,13 +163,13 @@ def new_med(request):
     }
     return render(request, 'pages/new_med.html', context)
 
-def view_all_refills(request):
+def view_all_refills(request): 
     refills = Refill.objects.order_by('-created')
     context = {
         'refills': refills,
     }
     return render(request, 'pages/all_refills.html', context)
-
+# have to figure out what information we want to display on this page
 
 def user_page(request, username):
     # CREATE refills
@@ -194,7 +206,7 @@ def user_page(request, username):
         'is_me': user == request.user,
     }
     return render(request, 'pages/user_page.html', context)
-
+# don't think we need this page
 
 
 def delete_refill(request, refill_id):
@@ -239,4 +251,4 @@ def edit_user_profile(request, username):
         'form': form,
     }
     return render(request, 'pages/edit_user_profile.html', context)
-
+#Jamie doesn't think we need this page
