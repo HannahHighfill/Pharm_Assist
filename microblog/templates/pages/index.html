@@ -18,7 +18,7 @@
     <link rel="icon" href="./img/core-img/favicon.ico">
 
     <!-- Core Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/style.css">
 
 </head>
 
@@ -78,27 +78,31 @@
                         <div class="classynav">
                             <ul id="nav">
                                 <li class="current-item"><a href="./index.html">Home</a></li>
-                               
+                                
+
                                             </ul>
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="./deny.html">Current Rx</a></li>
+                                <li><a href="./portfolio.html">Current Rx</a></li>
                                 
                                
                             </ul>
 
                             <!-- Get A Quote -->
                             <div class="get-a-quote ml-4 mr-3">
-                                <a href="./deny.html" class="btn uza-btn">Enter Refill Rx</a>
+                                <a href="./contact.html" class="btn uza-btn">Enter Refill Rx</a>
                             </div>
 
                             <!-- Login / Register -->
                             <div class=class="col g-signin2" data-onsuccess="onSignIn">
-                                <a href="https://accounts.google.com/signup/v2/webcreateaccount?hl=en-GB&flowName=GlifWebSignIn&flowEntry=SignUp"> <span> Create Google Account</span></a>
+                                <a href="https://accounts.google.com/signin/v2/sl/pwd?flowName=GlifWebSignIn&flowEntry=ServiceLogin">Login <span>/ Register</span></a>
                             </div>
 
-                            
+                            <!-- Search Icon -->
+                            <div class="search-icon" data-toggle="modal" data-target="#searchModal">
+                                <i class="icon_search"></i>
+                            </div>
                         </div>
                         <!-- Nav End -->
 
@@ -203,13 +207,10 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-                <div class="col-12 text-center mt-30">
-                    <a href="{% url 'social:begin' 'google-oauth2' %" class="btn uza-btn btn-3">Login with Google</a>
-                </div>
-            </div>
-        </div>
     </section>
+    <div class="col g-signin2" data-onsuccess="onSignIn">
+      <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
+    </div>
     
     
 

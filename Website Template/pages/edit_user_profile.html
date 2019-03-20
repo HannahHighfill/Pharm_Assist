@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+
+{% block content %}
+<div class="container">
+    <h1>@{{ user_on_page.username }}</h1>
+    <h3>Edit Profile</h3>
+    <form action="." method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-lg btn-info">Save</button>
+        <a class="btn btn-lg btn-warning" href="/users/{{ user.username }}/">Cancel</a>
+    </form>
+</div>
+{% endblock content %}
+
