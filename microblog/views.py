@@ -128,26 +128,38 @@ def new_med(request):
             starttime = str(refill.refill_time)
             hour =(datetime.datetime.combine(datetime.date(1,1,1),refill.refill_time) + timedelta(hours=1)).time()
             endtime = str(hour)
-            tz = refill.timezone
-            startdatetime= date + 'T' +starttime +tz
-            enddatetime= date + 'T' +endtime +tz
+            startdatetime= date + 'T' +starttime +'Z'
+            print(date)
+            print(startdatetime)
+            enddatetime= date + 'T' +endtime +'Z'
+            # all day event
             if refill.all_day == 1:
                 startdatetime=None
                 enddatetime=None
-                
+            else:
+                date = None
+            # repeating event
+            if refill.repeats ==None:
+                recurrence = None
+            elif refill.often > 0:
+                often= str(refill.often)
+                recurrence = 'RRULE:FREQ=' + refill.repeats + ';INTERVAL=' + often
             event = { 
-                #the event dictionary will look like this, just with the user's info
           'summary': 'Google I/O 2015',
           'location': '800 Howard St., San Francisco, CA 94103',
           'description': 'A chance to hear more about Google\'s developer products.',
           'start': {
             "date": date,
             'dateTime': startdatetime,
+            'timeZone': refill.timezone
           },
           'end': {
             "date": date,
             'dateTime': enddatetime,
-          }, #there are more fields that can be added
+            'timeZone': refill.timezone
+          }, 
+            "recurrence": [recurrence
+            ],
                 }
                 # creates and pushes the refill event
             event = service.events().insert(

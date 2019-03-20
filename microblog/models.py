@@ -9,21 +9,17 @@ import pytz
 import hashlib
 
 REPEATS_CHOICES = (
-        ('weeks', 'weeks'),
-        ('months', 'months'),
+        ('WEEKLY', 'weeks'),
+        ('MONTHLY', 'months'),
     )
 
 
 
 TIMEZONE_CHOICES = (
-        ("-05:00", 'EST'),
-        ("-04:00", 'EDT'),
-        ("-06:00", 'CST'),
-        ("-05:00", 'CDT'),
-        ("-07:00", 'MST'),
-        ("-06:00", 'MDT'),
-        ("-08:00", 'PST'),
-        ("-07:00", 'PDT'),
+        ('America/Los_Angeles', 'Pacific'),
+        ('America/Denver', 'Mountain'),
+        ('America/Chicago', 'Central'),
+        ('America/New_York', 'Eastern'),
     )
 
 class Refill(models.Model):
@@ -40,13 +36,7 @@ class Refill(models.Model):
     all_day = models.BooleanField(default=False, blank=True)
     often = models.IntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(20)], null=True, blank=True, help_text="every")
     repeats = models.CharField(max_length=9, choices= REPEATS_CHOICES, null=True, blank=True)
-    timezone = models.CharField(max_length=20, choices= TIMEZONE_CHOICES, blank=True, help_text="Timezone of first refill date", default= 'PDT')
-#    timezone = 4 options
-#    often = small positive integer
-#    repeats = weekly or monthly
-    #timezone (add time first)
-    #All day event
-    #repeat every number of weeks/months
+    timezone = models.CharField(max_length=20, choices= TIMEZONE_CHOICES, help_text="Timezone of first refill date", default= 'Pacific')
     
 #class Timezone(models.Model):
 #    user = models.ForeignKey(
@@ -61,6 +51,7 @@ class RefillEvent(models.Model):
         User,
         on_delete=models.CASCADE,
     )
+    
     # Added Refill form fields from views.py: 'Prescription', 'Nickname', 'Pharmacy', 'Date'
     prescription = models.CharField(max_length=160)
     nickname = models.CharField(max_length=160)
