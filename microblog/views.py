@@ -159,7 +159,7 @@ def new_med(request):
                 location = "at " + refill.pharmacy
             event = { 
                 #the event dictionary will look like this, just with the user's info
-          'summary': 'Refill:'+ medname,
+          'summary': 'Refill: '+ medname,
           'location': refill.pharmacy,
           'description': 'Time to refill '+ medname+' '+ location,
           'start': {
