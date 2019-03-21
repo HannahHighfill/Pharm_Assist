@@ -126,7 +126,6 @@ def new_med(request):
                 pickle.dump(creds, token)
 
             service = build('calendar', 'v3', credentials=creds)
-<<<<<<< HEAD
             #make date strings
             date = str(refill.refill_date)
             starttime = str(refill.refill_time)
@@ -151,11 +150,6 @@ def new_med(request):
             elif refill.often > 0:
                 often= str(refill.often)
                 recurrence = 'RRULE:FREQ=' + refill.repeats + ';INTERVAL=' + often
-            event = { 
-          'summary': 'Google I/O 2015',
-          'location': '800 Howard St., San Francisco, CA 94103',
-          'description': 'A chance to hear more about Google\'s developer products.',
-=======
             if refill.nickname is None:
                 medname=refill.prescription
             else: 
@@ -166,7 +160,6 @@ def new_med(request):
           'summary': 'Refill:'+ medname,
           'location': refill.pharmacy,
           'description': 'Time to refill '+ medname+' '+ 'at '+ refill.pharmacy,
->>>>>>> master
           'start': {
             "date": date,
             'dateTime': startdatetime,
@@ -194,13 +187,9 @@ def new_med(request):
     }
     return render(request, 'pages/new_med.html', context)
 
-<<<<<<< HEAD
-def view_all_refills(request): 
-    refills = Refill.objects.order_by('-created')
-=======
+
 def view_all_refills(request):
     refills = Refill.objects.order_by('-nickname')
->>>>>>> master
     context = {
         'refills': refills,
     }
