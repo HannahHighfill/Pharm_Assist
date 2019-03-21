@@ -1,6 +1,8 @@
 from __future__ import print_function
 import datetime
 from datetime import timedelta
+import dateutil
+from dateutil.tz import gettz
 import pickle
 import os.path
 import wsgiref
@@ -128,7 +130,10 @@ def new_med(request):
             starttime = str(refill.refill_time)
             hour =(datetime.datetime.combine(datetime.date(1,1,1),refill.refill_time) + timedelta(hours=1)).time()
             endtime = str(hour)
-            startdatetime= date + 'T' +starttime +'Z'
+            timezone = gettz(refill.timezone)
+            print(str(timezone))
+            startdatetime= date + 'T' +starttime +'Z' #if timezone not in here it will use utc, but place it in los angeles time
+            # map timezones to utc offsets. if i just do it in pdt no one will notice. but i will know.
             print(date)
             print(startdatetime)
             enddatetime= date + 'T' +endtime +'Z'
