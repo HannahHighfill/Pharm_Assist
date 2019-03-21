@@ -1,6 +1,8 @@
 from __future__ import print_function
 import datetime
 from datetime import timedelta
+import dateutil
+from dateutil.tz import gettz
 import pickle
 import os.path
 import wsgiref
@@ -44,13 +46,13 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date']
+        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date', "timezone", "refill_time", "all_day", "often", "repeats"]
         
 class RefillEvent(forms.ModelForm):
     class Meta:
         model = RefillEvent
         fields = ['prescription', 'nickname']
-# the fields will change after we figure out how to auto-populate the event dictionary
+# Jamie think we don't need this
 
 
 # This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
@@ -124,6 +126,31 @@ def new_med(request):
                 pickle.dump(creds, token)
 
             service = build('calendar', 'v3', credentials=creds)
+
+            #make date strings
+            date = str(refill.refill_date)
+            starttime = str(refill.refill_time)
+            hour =(datetime.datetime.combine(datetime.date(1,1,1),refill.refill_time) + timedelta(hours=1)).time()
+            endtime = str(hour)
+            timezone = gettz(refill.timezone)
+            print(str(timezone))
+            startdatetime= date + 'T' +starttime +'Z' #if timezone not in here it will use utc, but place it in los angeles time
+            # map timezones to utc offsets. if i just do it in pdt no one will notice. but i will know.
+            print(date)
+            print(startdatetime)
+            enddatetime= date + 'T' +endtime +'Z'
+            # all day event
+            if refill.all_day == 1:
+                startdatetime=None
+                enddatetime=None
+            else:
+                date = None
+            # repeating event
+            if refill.repeats ==None:
+                recurrence = None
+            elif refill.often > 0:
+                often= str(refill.often)
+                recurrence = 'RRULE:FREQ=' + refill.repeats + ';INTERVAL=' + often
             if refill.nickname is None:
                 medname=refill.prescription
             else: 
@@ -135,13 +162,17 @@ def new_med(request):
           'location': refill.pharmacy,
           'description': 'Time to refill '+ medname+' '+ 'at '+ refill.pharmacy,
           'start': {
-            'dateTime': '2019-03-17T09:00:00-07:00',
-            'timeZone': 'America/Los_Angeles',
+            "date": date,
+            'dateTime': startdatetime,
+            'timeZone': refill.timezone
           },
           'end': {
-            'dateTime': '2019-03-17T17:00:00-07:00',
-            'timeZone': 'America/Los_Angeles',
-          }, #there are more fields that can be added
+            "date": date,
+            'dateTime': enddatetime,
+            'timeZone': refill.timezone
+          }, 
+            "recurrence": [recurrence
+            ],
                 }
                 # creates and pushes the refill event
             event = service.events().insert(
@@ -157,13 +188,14 @@ def new_med(request):
     }
     return render(request, 'pages/new_med.html', context)
 
+
 def view_all_refills(request):
     refills = Refill.objects.order_by('-nickname')
     context = {
         'refills': refills,
     }
     return render(request, 'pages/all_refills.html', context)
-
+# have to figure out what information we want to display on this page
 
 def user_page(request, username):
     # CREATE refills
@@ -200,7 +232,7 @@ def user_page(request, username):
         'is_me': user == request.user,
     }
     return render(request, 'pages/user_page.html', context)
-
+# don't think we need this page
 
 
 def delete_refill(request, refill_id):
@@ -245,4 +277,4 @@ def edit_user_profile(request, username):
         'form': form,
     }
     return render(request, 'pages/edit_user_profile.html', context)
-
+#Jamie doesn't think we need this page
