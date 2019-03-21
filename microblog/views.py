@@ -95,6 +95,7 @@ def new_med(request):
             refill = form.save(commit=False)
             refill.user_id = request.user.id
             refill.save()
+            print("form saved")
             
             # Write the form's info into an event on their google calendar
             # if token.pickle exists, don't need rest of login
@@ -125,6 +126,7 @@ def new_med(request):
                 pickle.dump(creds, token)
 
             service = build('calendar', 'v3', credentials=creds)
+<<<<<<< HEAD
             #make date strings
             date = str(refill.refill_date)
             starttime = str(refill.refill_time)
@@ -153,6 +155,18 @@ def new_med(request):
           'summary': 'Google I/O 2015',
           'location': '800 Howard St., San Francisco, CA 94103',
           'description': 'A chance to hear more about Google\'s developer products.',
+=======
+            if refill.nickname is None:
+                medname=refill.prescription
+            else: 
+                medname=refill.nickname
+                
+            event = { 
+                #the event dictionary will look like this, just with the user's info
+          'summary': 'Refill:'+ medname,
+          'location': refill.pharmacy,
+          'description': 'Time to refill '+ medname+' '+ 'at '+ refill.pharmacy,
+>>>>>>> master
           'start': {
             "date": date,
             'dateTime': startdatetime,
@@ -180,8 +194,13 @@ def new_med(request):
     }
     return render(request, 'pages/new_med.html', context)
 
+<<<<<<< HEAD
 def view_all_refills(request): 
     refills = Refill.objects.order_by('-created')
+=======
+def view_all_refills(request):
+    refills = Refill.objects.order_by('-nickname')
+>>>>>>> master
     context = {
         'refills': refills,
     }
