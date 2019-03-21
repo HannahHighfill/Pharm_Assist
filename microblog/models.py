@@ -36,14 +36,7 @@ class Refill(models.Model):
     all_day = models.BooleanField(default=False, blank=True)
     often = models.IntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(20)], null=True, blank=True, help_text="every")
     repeats = models.CharField(max_length=9, choices= REPEATS_CHOICES, null=True, blank=True)
-    timezone = models.CharField(max_length=20, choices= TIMEZONE_CHOICES, help_text="Timezone of first refill date", default= 'Pacific')
-    
-#class Timezone(models.Model):
-#    user = models.ForeignKey(
-#        User,
-#        on_delete=models.CASCADE,
-#    )
-#    timezone = models.
+
 
 #Jamie thinks we will end up deleting this
 class RefillEvent(models.Model):

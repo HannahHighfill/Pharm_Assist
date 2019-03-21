@@ -46,7 +46,7 @@ class EditUserForm(forms.ModelForm):
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
-        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date', "timezone", "refill_time", "all_day", "often", "repeats"]
+        fields = ['prescription', 'nickname', 'pharmacy', 'refill_date', "refill_time", "all_day", "often", "repeats"]
         
 class RefillEvent(forms.ModelForm):
     class Meta:
@@ -132,13 +132,10 @@ def new_med(request):
             starttime = str(refill.refill_time)
             hour =(datetime.datetime.combine(datetime.date(1,1,1),refill.refill_time) + timedelta(hours=1)).time()
             endtime = str(hour)
-            timezone = gettz(refill.timezone)
-            print(str(timezone))
-            startdatetime= date + 'T' +starttime +'Z' #if timezone not in here it will use utc, but place it in los angeles time
-            # map timezones to utc offsets. if i just do it in pdt no one will notice. but i will know.
+            startdatetime= date + 'T' +starttime +'-07:00' 
             print(date)
             print(startdatetime)
-            enddatetime= date + 'T' +endtime +'Z'
+            enddatetime= date + 'T' +endtime +'-07:00'
             # all day event
             if refill.all_day == 1:
                 startdatetime=None
@@ -155,21 +152,25 @@ def new_med(request):
                 medname=refill.prescription
             else: 
                 medname=refill.nickname
-                
+            location= ""
+            if refill.pharmacy is None:
+                pass
+            else:
+                location = "at " + refill.pharmacy
             event = { 
                 #the event dictionary will look like this, just with the user's info
           'summary': 'Refill:'+ medname,
           'location': refill.pharmacy,
-          'description': 'Time to refill '+ medname+' '+ 'at '+ refill.pharmacy,
+          'description': 'Time to refill '+ medname+' '+ location,
           'start': {
             "date": date,
             'dateTime': startdatetime,
-            'timeZone': refill.timezone
+            'timeZone':'America/Los_Angeles'
           },
           'end': {
             "date": date,
             'dateTime': enddatetime,
-            'timeZone': refill.timezone
+            'timeZone': 'America/Los_Angeles'
           }, 
             "recurrence": [recurrence
             ],
