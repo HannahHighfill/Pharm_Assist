@@ -58,7 +58,7 @@ class RefillEvent(forms.ModelForm):
 def homepage(request):
     context = {
     }
-    return render(request, 'pages/homepage.html', context)
+    return render(request, 'pages/index.html', context)
 
 
 
