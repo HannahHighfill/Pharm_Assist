@@ -39,4 +39,5 @@ urlpatterns = [
 # NOTE: To get media working, we need to do something like this. See
 # also the end of the settings.py file.
 from django.conf.urls.static import static
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
