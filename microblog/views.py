@@ -190,6 +190,7 @@ def new_med(request):
 
 def view_all_refills(request):
     refills = Refill.objects.order_by('-nickname')
+    refills.user_id = request.user.id
     context = {
         'refills': refills,
     }

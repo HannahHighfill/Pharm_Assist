@@ -3,29 +3,20 @@
 <div class="refill card">
     <div class="row">
         <p class="card-title">
-            <a href="/users/{{ refill.username }}/">
-                <img src="{{ refill.get_gravatar }}" />
-                {% if refill.image %}
-                    <img src="{{ refill.image.url }}" style="max-height: 80px"/>
-                {% endif %}
-                <strong>@{{ refill.username }}</strong>
-            </a>
-            {{ refill.text }}
         </p>
+               <p>{{ refill.prescription }}</p>
+               <p><br>{{ refill.nickname }}</p>
+               <p><br>{{ refill.location }}</p>
+        <div class="links">
+        <a href="/delete-refill/{{ refill.id }}/" class="btn btn-link">
+                        <i class="octicon octicon-trashcan"></i>
+                    </a>
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ refill.id }}">
+                        <i class="octicon octicon-pencil"></i>
+                    </button>
+                    {% include "snippets/edit_refill_modal.html" %}
+                </div>
     </div>
-
-    {% if user.is_authenticated %}
-        {% if user.username == refill.username %}
-            <div class="links">
-                <a href="/delete-refill/{{ refill.id }}/" class="btn btn-link">
-                    <i class="octicon octicon-trashcan"></i>
-                </a>
-                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ refill.id }}">
-                    <i class="octicon octicon-pencil"></i>
-                </button>
-                {% include "snippets/edit_refill_modal.html" %}
-            </div>
-        {% endif %}
-    {% endif %}
 </div>
 {% endfor %}
+
