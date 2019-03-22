@@ -1,12 +1,14 @@
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="uza - Model Agency HTML5 Template">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-     <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
@@ -15,14 +17,15 @@
     <title>Uza - Creative Agency HTML5 Template</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="../../static/img/core-img/favicon.ico">
+    <link rel="icon" href="/static/img/core-img/favicon.ico">
 
     <!-- Core Stylesheet -->
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 </head>
 
 <body>
+
     <!-- Preloader -->
     <div id="preloader">
         <div class="wrapper">
@@ -60,7 +63,7 @@
                 <nav class="classy-navbar justify-content-between" id="uzaNav">
 
                     <!-- Logo -->
-                    <a class="nav-brand" href="index.html"><img src="../../static/img/core-img/logo.png" alt=""></a>
+                    <a class="nav-brand" href="index.html"><img src="/static/img/core-img/logo.png" alt=""></a>
 
                     <!-- Navbar Toggler -->
                     <div class="classy-navbar-toggler">
@@ -226,15 +229,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
     <!-- ******* All JS Files ******* -->
     <!-- jQuery js -->
-    <script src="../../static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
     <!-- Popper js -->
-    <script src="../../static/js/popper.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
     <!-- Bootstrap js -->
-    <script src="../../static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
     <!-- All js -->
-    <script src="../../static/js/uza.bundle.js"></script>
+    <script src="/static/js/uza.bundle.js"></script>
     <!-- Active js -->
-    <script src="../../static/js/default-assets/active.js"></script>
+    <script src="/static/js/default-assets/active.js"></script>
 
 </body>
 
