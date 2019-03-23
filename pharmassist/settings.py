@@ -28,7 +28,7 @@ SECRET_KEY = 'rre1ghh#l@&z!zcbi614gzg&r-e(zfk@110d+zi@wal_5s^=5&'
 DEBUG = True
 
 ALLOWED_HOSTS = ['pharm-assist-refills.herokuapp.com',
-                'localhost', "young-ocean-55221.herokuapp.com"]
+                'localhost', "young-ocean-55221.herokuapp.com", 'pharmassistrefills.herokuapp.com']
 
 
 # Application definition
