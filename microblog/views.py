@@ -29,40 +29,21 @@ from .models import RefillEvent
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.events"] #, "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
 
-class NewUserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'password', 'email']
-
-
-class EditUserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
-
 
 class RefillForm(forms.ModelForm):
     class Meta:
         model = Refill
         fields = ['prescription', 'nickname', 'pharmacy', 'refill_date', "refill_time", "all_day", "often", "repeats"]
         
-class RefillEvent(forms.ModelForm):
-    class Meta:
-        model = RefillEvent
-        fields = ['prescription', 'nickname']
-# Jamie think we don't need this
 
 
-# This homepage can end up hostign the calendar, Jamie just put them on separate pages so the info would be easy to find
-#currently the homepage logs a user in or says hello to them
+
 def homepage(request):
     context = {
     }
-    return render(request, 'pages/homepage.html', context)
+    return render(request, 'pages/index.html', context)
 
-
-
-# I do not know if we need this page, given that logging in is happening through google and not through us
+# apparently we need this
 def login(request):
     context={
     }
@@ -72,15 +53,8 @@ def login(request):
 # currently the only way to logout is to go to '/logout' and it will do it for you
 def logout(request):
     auth_logout(request)
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+    return redirect('/')
     
-    
-#this does not need to be its own page, Jamie just seperated it out so you guys can find all the essential html and code to make the calendar show
-def calendar(request):
-            context={
-                'username':request.user.username 
-            }
-            return render(request, 'pages/calendar.html', context)
 
 # This page displays the new med form, sends it to the database, and writes the calendar event for the new med
 def new_med(request):
@@ -177,7 +151,7 @@ def new_med(request):
             event = service.events().insert(
                             calendarId='primary', body=event).execute()
             print ('Event created: %s' % (event.get('htmlLink')))
-            return redirect('/calendar')
+            return redirect('/all-refills')
 
     else:
         # if a GET we'll create a blank form
@@ -190,49 +164,13 @@ def new_med(request):
 
 def view_all_refills(request):
     refills = Refill.objects.order_by('-nickname')
-    refills.user_id = request.user.id
+    refills_by_user = refills.filter(user_id=request.user.id)
     context = {
-        'refills': refills,
+        'refills': refills_by_user,
+        'username':request.user.username 
     }
     return render(request, 'pages/all_refills.html', context)
 # have to figure out what information we want to display on this page
-
-def user_page(request, username):
-    # CREATE refills
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request,
-        # including uploaded files
-        form = RefillForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            # Use the form to save
-            refill = form.save(commit=False)
-            refill.username = request.user.username
-            refill.save()
-            # Cool trick to redirect to the previous page
-            return redirect(request.META.get('HTTP_REFERER', '/'))
-
-    else:
-        # if a GET we'll create a blank form
-        form = RefillForm()
-
-    user = User.objects.get(username=username)
-
-    # READ refills and User information from database
-    # We can break down complicated filtering of "querysets" into multiple
-    # lines like this
-    refills = Refill.objects.order_by('-created')
-    refills_by_user = refills.filter(username=username)
-
-    context = {
-        'refills': refills_by_user,
-        'form': form,
-        'user_on_page': user,
-        'is_me': user == request.user,
-    }
-    return render(request, 'pages/user_page.html', context)
-# don't think we need this page
 
 
 def delete_refill(request, refill_id):
@@ -254,27 +192,3 @@ def update_refill(request, refill_id):
 
     # Redirect to wherever they came from
     return redirect(request.META.get('HTTP_REFERER', '/'))
-
-
-def edit_user_profile(request, username):
-    # Get the user we are looking for
-    user = User.objects.get(username=username)
-
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request
-        form = EditUserForm(request.POST, instance=user)
-
-        if form.is_valid():
-            form.save()
-            return redirect('/users/' + user.username)
-
-    else:
-        # A GET, create a pre-filled form with the instance.
-        form = EditUserForm(instance=user)
-
-    context = {
-        'form': form,
-    }
-    return render(request, 'pages/edit_user_profile.html', context)
-#Jamie doesn't think we need this page

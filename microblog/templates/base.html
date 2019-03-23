@@ -1,146 +1,121 @@
-{% load static i18n %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}Pharm-assist{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-    
-    <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/litera/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="uza - Model Agency HTML5 Template">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <style>
+    <!-- Title -->
+    <title>Uza - Creative Agency HTML5 Template</title>
 
-        /* Let's make our logo look like You-Know-Who's */
-        .navbar-brand {
-            letter-spacing: 1px;
-            font-size: 24pt;
-            margin-right: 50px;
-        }
-        #hero {
-            background: url({% static "the_bird.png" %}) top left;
-            min-height: 100vh;
-            color: white;
-            padding-top: 20vh;
-            background-color: #1374bd;
-        }
-        #hero h1 {
-            margin-top: 60px;
-            font-size: 24pt;
-            text-align: center;
-        }
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'img/core-img/favicon.ico' %}">
 
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href=" {% static 'style.css' %}">
 
-        .refill {
-            font-size: 20pt;
-            margin: 30px;
-        }
+</head>
 
-        .refill img {
-            float: left;
-            margin: 20px;
-        }
+<body>
 
-        .refill .links {
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
-        }
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area">
+        <!-- Main Header Start -->
+        <div class="main-header-area">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Classy Menu -->
+                <nav class="classy-navbar justify-content-between" id="uzaNav">
 
-        body {
-            background: #fff;
-        }
+                    <!-- Logo -->
+                    <a class="nav-brand" href="index.html"><img src="{% static 'img/core-img/logo.png' %}" alt=""></a>
 
-        .nav-link {
-            font-size: 16pt;
-        }
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
 
-        form textarea,
-        form input {
-            font-size: 16pt;
-            max-height: 50px;
-            width: 300px;
-        }
+                    <!-- Menu -->
+                    <div class="classy-menu">
+                        <!-- Menu Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
 
-        form label {
-            font-size: 16pt;
-            font-weight: 200;
-            min-width: 100px;
-            vertical-align: top;
-        }
-        button.btn-lg {
-            background: #1374bd !important;
-            font-size: 16pt;
-        }
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul id="nav">
+                                <li class="current-item"><a href="/">Home</a></li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="/all-refills">My Homepage</a></li>
+                                    <li><a href="/new-med">Add a Med</a></li>
+                                    <li><a href="/logout">Logout</a></li>
+                                {% endif %}
+                            </ul>
 
-    </style>
+                            <!-- Login / Register -->
+                            <div class="login-register-btn mx-3">
+                                <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</span></a>
+                            </div>
+                        </div>
+                        <!-- Nav End -->
 
-  </head>
-
-  <body>
-
-
-      <nav class="navbar navbar-expand-md">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="{% static "the_bird.png" %}" style="height: 40px" /> Pharm-assist
-            </a>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="btn btn-primary btn-lg" href="{% url "all_refills" %}">All Refills</a>
-                    </li>
-
-                    <!-- If the user is logged in, greet them -->
-                    {% if user.is_authenticated %}
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <div>
+    {% if user.is_authenticated %}
                         <li class="nav-item" style="padding-left: 50px">
-                            <a class="btn btn-primary btn-lg" href="/users/{{ user.username }}/">{{ user }} (you)</a>
+                            <a class="btn btn-primary btn-lg" href="/all-refills">{{ user }} (you)</a>
+                            <!-- this button currently isn't working -->
                         </li>
                     {% endif %}
-                </ul>
-
-
-                <!--
-                <form class="form-inline my-2 my-lg-0" action="/search/" method="GET">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" name="query" />
-                </form>
-                -->
-            </div>
-        </nav>
-
+        <div>
+        {% block index %}
+            {% if user.is_authenticated %}
+                  {% block content %}
+                  {% endblock content %}
+            {% else %}
+                <h1>You Must Be Logged In To View the Contents of This Page.Click the link below to return to the Home screen.</h1>
+                <div class="row">
+                        <div class="col-12 text-center mt-30">
+                            <a href='/' class="btn uza-btn btn-3">Click here to return to Home Screen</a>
+                        </div>
+                </div>
+            {% endif %}
+        {% endblock index %}
+        </div>
     </div>
 
 
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
+ <div class="row" style="margin-bottom: 30px;">
+                
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </div>
 
-      {% block content %}
-      {% endblock content %}
+        </div>
+    </footer>
+    <!-- ***** Footer Area End ***** -->
 
+    <!-- ******* All JS Files ******* -->
+    <!-- jQuery js -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- All js -->
+    <script src="{% static 'js/uza.bundle.js' %}"></script>
+    <!-- Active js -->
+    <script src="{% static 'js/default-assets/active.js' %}"></script>
 
-    {% block modal %}{% endblock modal %}
+</body>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% block javascript %}
-
-      <!-- Required by Bootstrap v4 beta -->
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
-      <!-- place project specific Javascript in this file -->
-
-    {% endblock javascript %}
-  </body>
 </html>
- 

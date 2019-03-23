@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+        <!-- Background Curve -->
+        <div class="breadcrumb-bg-curve">
+            <img src="./img/core-img/curve-5.png" alt="">
+        </div>
 <div class="container">
-    <h1>@{{ user_on_page.username }}</h1>
     <h3>Enter Medicine Info</h3>
     <form action="." method="POST">
         {% csrf_token %}
