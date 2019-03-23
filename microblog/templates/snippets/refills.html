@@ -5,17 +5,18 @@
         <p>    Rx: {{ refill.prescription }}
         <br>    Rx Nickname: {{ refill.nickname }}
         <br>    Pharmacy: {{ refill.pharmacy }}
-        </p>
-    </div>    
-    <div class="links">
-        <a href="/delete-refill/{{ refill.id }}/" class="btn btn-link">            
-            <i class="octicon octicon-trashcan"></i>
-        </a>
-        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ refill.id }}">
-            <i class="octicon octicon-pencil"></i>
-        </button>     
-        {% include "snippets/edit_refill_modal.html" %} 
+        </p>   
+        <div class="links">
+        <a href="/delete-refill/{{ refill.id }}/" class="btn btn-link">
+                        <i class="octicon octicon-trashcan"></i>
+                    </a>
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ refill.id }}">
+                        <i class="octicon octicon-pencil"></i>
+                    </button>
+                    {% include "snippets/edit_refill_modal.html" %}
+                </div>
     </div>
 </div>
 {% endfor %}
+
 

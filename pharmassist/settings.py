@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-from pharmassist.secret_settings import *
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ="356344142805-ls9g1o0l1m422c5c6880o43o270k6j07.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "jXESXJ-9MqJRM1FGbOr_Qyf1"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +28,7 @@ SECRET_KEY = 'rre1ghh#l@&z!zcbi614gzg&r-e(zfk@110d+zi@wal_5s^=5&'
 DEBUG = True
 
 ALLOWED_HOSTS = ['pharm-assist-refills.herokuapp.com',
-                'localhost']
+                'localhost', "young-ocean-55221.herokuapp.com", 'pharmassistrefills.herokuapp.com']
 
 
 # Application definition
