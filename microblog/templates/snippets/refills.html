@@ -1,21 +1,20 @@
 
 {% for refill in refills %}
 <div class="refill card">
-    <div class="row">
-        <p class="card-title">
+    <div class="text">
+        <p>    Rx: {{ refill.prescription }}
+        <br>    Rx Nickname: {{ refill.nickname }}
+        <br>    Pharmacy: {{ refill.pharmacy }}
         </p>
-               <p>{{ refill.prescription }}</p>
-               <p><br>{{ refill.nickname }}</p>
-               <p><br>{{ refill.pharmacy }}</p>
-        <div class="links">
-        <a href="/delete-refill/{{ refill.id }}/" class="btn btn-link">
-                        <i class="octicon octicon-trashcan"></i>
-                    </a>
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ refill.id }}">
-                        <i class="octicon octicon-pencil"></i>
-                    </button>
-                    {% include "snippets/edit_refill_modal.html" %}
-                </div>
+    </div>    
+    <div class="links">
+        <a href="/delete-refill/{{ refill.id }}/" class="btn btn-link">            
+            <i class="octicon octicon-trashcan"></i>
+        </a>
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modal{{ refill.id }}">
+            <i class="octicon octicon-pencil"></i>
+        </button>     
+        {% include "snippets/edit_refill_modal.html" %} 
     </div>
 </div>
 {% endfor %}
