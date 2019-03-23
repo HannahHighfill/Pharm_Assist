@@ -2080,5 +2080,8 @@ input:focus {
   .uza-contact-form textarea.form-control {
     height: 110px;
     padding: 20px; }
-
+.container {
+    position: relative;
+    top: -200px;
+    }
 /*# sourceMappingURL=style.css.map */
