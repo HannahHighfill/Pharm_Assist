@@ -164,10 +164,12 @@ def new_med(request):
 def view_all_refills(request):
     refills = Refill.objects.order_by('-nickname')
     refills_by_user = refills.filter(user_id=request.user.id)
+    refills.user_id = request.user.id
     context = {
-        'refills': refills_by_user,
+        'refills': refills,
         'username':request.user.username 
     }
+    
     return render(request, 'pages/all_refills.html', context)
 # have to figure out what information we want to display on this page
 
