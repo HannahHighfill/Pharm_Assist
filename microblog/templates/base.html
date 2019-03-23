@@ -56,10 +56,10 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul id="nav">
-                                <li class="current-item"><a href="/">Home</a></li>
+                                <li><a class="nav-item nav-link {% block nav_item_home %}{% endblock nav_item_home %}" href="/">Home</a></li>
                                 {% if user.is_authenticated %}
-                                    <li><a href="/all-refills">My Homepage</a></li>
-                                    <li><a href="/new-med">Add a Med</a></li>
+                                    <li ><a class="nav-item nav-link {% block nav_item_all_refills %}{% endblock nav_item_all_refills %}" href="/all-refills">My Homepage</a></li>
+                                    <li><a class="nav-item nav-link {% block nav_item_new_med %}{% endblock nav_item_new_med %}"href="/new-med">Add a Med</a></li>
                                     <li><a href="/logout">Logout</a></li>
                                 {% endif %}
                             </ul>
