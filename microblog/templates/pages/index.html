@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static i18n %}
+{% block nav_item_about %}active{% endblock nav_item_about %} 
 
 {% block index %}
     <section class="welcome-area">
@@ -30,6 +31,11 @@
                                     <img src="" alt="" data-animation="slideInRight" data-delay="400ms">
                                 </div>
                             </div>
+                            <div class="row">
+                <div class="col-12 text-center mt-30">
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn uza-btn btn-3">Login with Google</a>
+                </div>
+            </div>
                         </div>
                     </div>
                 </div>
@@ -60,6 +66,11 @@
                                     <img src="" alt="" data-animation="slideInRight" data-delay="400ms">
                                 </div>
                             </div>
+                            <div class="row">
+                <div class="col-12 text-center mt-30">
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn uza-btn btn-3">Login with Google</a>
+                </div>
+            </div>
                         </div>
                     </div>
                 </div>
@@ -90,14 +101,17 @@
                                     <img src="" alt="" data-animation="slideInRight" data-delay="400ms">
                                 </div>
                             </div>
+                            <div class="row">
+                <div class="col-12 text-center mt-30">
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn uza-btn btn-3">Login with Google</a>
+                </div>
+            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-                <div class="col-12 text-center mt-30">
-                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn uza-btn btn-3">Login with Google</a>
+        
                 </div>
             </div>
         </div>
