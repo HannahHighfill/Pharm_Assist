@@ -1,56 +1,40 @@
 # Pharmassist #
-**Description:** Pharmassist integrates with your Google Calendar, adding prescription reminders through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, and choose how far in advance you'd like to get a reminder. Choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. With Pharmassist you have an easy-to-reach list of your prescription refills and your reminders are integrated into how you already use calendars.
+**Description:** Pharmassist integrates with your Google Calendar, adding prescription reminders through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, edit and delete your prescription refills and your Google Calendar will reflect all changes. For your privacy and comfort, choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. With Pharmassist you have an easy-to-reach list of your prescription refills and your reminders are integrated into how you already use calendars.
 
 **Heroku App**
-http://pharm-assist-refills.herokuapp.com
+http://pharmassistrefills.herokuapp.com/
 
 **Team Members:** Jamie, Kendyl, Hannah
 
-# Working Plan #
-* Jamie: Models.py
-* Hannah: View.py 
-* Kendyl: Templates HTML & bootstrapping
-* Google API will be shared by Jamie & Hannah
-
-**Plan**
-We will start from the Twitten class activity because it has functionality and structure for creating user and posting/deleting tweets. We will Add the Google calendar API and change the post functionality so it becomes a way to add prescription reminders to your list and post them to your calendar. As outlined below,
-
-**Possible ideas:**
-* Since there is a built in ability to add photos, photos of your prescription could be added
-* If the calendar API allows, we will allow users to choose when they'd like to be reminded
-* Since a logo is offered for each "tweet" (which will become prescriptions) we could offer users the ability to add an image correlation on their calendars, similar to the nickname idea this would mean their prescriptions are kept private on calendar but recognizable for them
-
-**Expected challenges**
-The Google Calendar API has some unknown so we will see how difficult that is. We are also not sure if we will need separate signins for Google and for Pharmassist. The pages we are hoping to make are modest, so hopefully no unforeseen issues there.
-
-# Site #
-https://hannahhighfill.github.io/Pharm_Assist/
-
 # Templates & APIs #
+**Template**
+* Twitten
+
 **API**
 * Google Calendar's API: https://developers.google.com/calendar/
 
 **Django Template**
-* TBD
-
-# Wireframes #
-![Image of Wireframe 1](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG_2697.jpg)
-![Image of Wireframe 2](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG_2698.jpg)
-![Image of Wireframe 3](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG_2699.jpg)
-![Image of Wireframe 4](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG-3390.JPG)
-![Image of Wireframe 5](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG-3391.JPG)
-![Image of Wireframe 6](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes/IMG-3392.JPG)
-
+* Uza: https://colorlib.com/wp/template/uza/
 
 **Pages**
 1. Landing Page: 
-  * Sign into your Google account for OAuth
-  * (?) create Pharmassist account
-2. Landing Page: Sign into Google to display your calendar
-3. Add Prescription Page with form:
-  * Nickname of prescription
-  * Prescription number for refill
-  * Date for refill
-  * How often does it recur
+  * Sign into your Google account to access your Google Calendar with Pharmassist
+  * To sign in, click on "Login with Google" in the top, right hand corner and follow the Google authentication and permissions flow
+  * Once completed, Pharmassist will redirect you to the Home Page
+
+2. Home Page:
+  * Displays your Google Calendar with Pharmassist refills displayed as entered
+  * View a full list of your refills, their calendar nicknames, and the location of the pharmacy where you should pick them up.
+  * Edit and delete refills from your calendar by deleting them from the list below using the "trash" and "pencil" icons
+  * Refer to your calendar events for full information
+  
+3.Add a Med Page:
+* Fill in the form provided to add a prescription refill. The refill will be added to both your Google Calendar and your list of meds as displayed on the Home Page
+  * Prescription (Medicine name): The prescription name as the pharmacy will recognize it
+  * Medicine Nickname (Optional): this is how the prescription will appear on your calendar, providing privacy as well as a recall tool in the place of the scientific name
+  * Pharmacy for Refill (Name and Location): This will load as the location for your calendar event, reminding you from which pharmacy you should pick up your refill
+  * Refill date (Next date to refill med): the day on which your reminder will appear on Google Calendar. Defaults to the current day
+  * Refill time: Enter a pickup time if you'd like; time will default to noon
+  * All day checkbox: check this box if you'd prefer that the calendar event show as an "all day" event rather than at the time entered. This will make the display on your calendar move from an event to a banner at the top of that day's calendar events
   * Pharmacy location
-  * How long beforehand would you like to be reminded? 
+  * Repeats Every: Choose "weeks" or "months" from the dropdown menu below, and the number above by either typing or using the up and down arrows. This will result in a frequency such as "Every 2 weeks" or "Every 6 months"
