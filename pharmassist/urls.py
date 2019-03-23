@@ -24,14 +24,11 @@ from microblog import views
 urlpatterns = [
     path('', views.homepage, name='home'),
     path('all-refills/', views.view_all_refills, name="all_refills"),
-    path('users/<username>/', views.user_page, name="user_page"),
-    path('users/<username>/edit-profile/', views.edit_user_profile),
     path('update-refill/<refill_id>/', views.update_refill),
     path('delete-refill/<refill_id>/', views.delete_refill),
     path('admin/', admin.site.urls),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
-    path('calendar/', views.calendar, name='calendar'),
     path('new-med/', views.new_med, name='newmedform'),
     url(r'^auth/', include('social_django.urls', namespace='social')),
 ]

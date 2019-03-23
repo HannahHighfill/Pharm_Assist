@@ -47,9 +47,12 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul id="nav">
-                                <li class="current-item"><a href="./index.html">Home</a></li>
-                                {% block navbar %}
-                                {% endblock %}
+                                <li class="current-item"><a href="/">Home</a></li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="/all-refills">My Homepage</a></li>
+                                    <li><a href="/new-med">Add a Med</a></li>
+                                    <li><a href="/logout">Logout</a></li>
+                                {% endif %}
                             </ul>
 
                             <!-- Login / Register -->
@@ -68,12 +71,24 @@
     <div>
     {% if user.is_authenticated %}
                         <li class="nav-item" style="padding-left: 50px">
-                            <a class="btn btn-primary btn-lg" href="/users/{{ user.username }}/">{{ user }} (you)</a>
+                            <a class="btn btn-primary btn-lg" href="/all-refills">{{ user }} (you)</a>
+                            <!-- this button currently isn't working -->
                         </li>
                     {% endif %}
         <div>
-          {% block content %}
-          {% endblock content %}
+        {% block index %}
+            {% if user.is_authenticated %}
+                  {% block content %}
+                  {% endblock content %}
+            {% else %}
+                <h1>You Must Be Logged In To View the Contents of This Page.Click the link below to return to the Home screen.</h1>
+                <div class="row">
+                        <div class="col-12 text-center mt-30">
+                            <a href='/' class="btn uza-btn btn-3">Click here to return to Home Screen</a>
+                        </div>
+                </div>
+            {% endif %}
+        {% endblock index %}
         </div>
     </div>
 

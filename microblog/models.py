@@ -34,8 +34,8 @@ class Refill(models.Model):
     refill_time = models.TimeField(default=datetime.time(12, 00, 00), null=True, blank=True)
     refill_time = models.TimeField(default=datetime.time(12, 00, 00), null=True, blank=True)
     all_day = models.BooleanField(default=False, blank=True)
-    often = models.IntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(20)], null=True, blank=True, help_text="every")
-    repeats = models.CharField(max_length=9, choices= REPEATS_CHOICES, null=True, blank=True)
+    often = models.IntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(20)], null=True, blank=True, verbose_name="Repeates Every")
+    repeats = models.CharField(max_length=9, choices= REPEATS_CHOICES, null=True, blank=True, verbose_name="")
 
 
 #Jamie thinks we will end up deleting this
