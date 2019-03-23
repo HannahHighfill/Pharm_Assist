@@ -27,6 +27,7 @@ from .models import Refill
 from .models import RefillEvent
 
 
+
 SCOPES = ["https://www.googleapis.com/auth/calendar.events"] #, "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
 
 
@@ -50,7 +51,6 @@ def login(request):
     return render(request, 'pages/login.html', context)
 
 
-# currently the only way to logout is to go to '/logout' and it will do it for you
 def logout(request):
     auth_logout(request)
     return redirect('/')
