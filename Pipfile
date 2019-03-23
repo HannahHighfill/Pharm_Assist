@@ -15,6 +15,7 @@ whitenoise = "*"
 dj-database-url = "*"
 httplib2 = "*"
 python-dateutil = "*"
+google-auth-oauthlib = "*"
 
 [requires]
 python_version = "3.6"
