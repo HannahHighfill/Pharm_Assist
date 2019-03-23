@@ -9,7 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title -->
+
     <title>Pharmassist</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'img/core-img/favicon.ico' %}">
+
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href=" {% static 'style.css' %}">
@@ -27,8 +32,9 @@
                 <!-- Classy Menu -->
                 <nav class="classy-navbar justify-content-between" id="uzaNav">
 
-                    <!-- Logo -->
-                    <a class="nav-brand"><img alt=""></a>
+
+                    <a class="nav-brand" href="index.html"><img alt=""></a>
+
 
                     <!-- Navbar Toggler -->
                     <div class="classy-navbar-toggler">
@@ -45,10 +51,10 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul id="nav">
-                                <li class="current-item"><a href="/">Home</a></li>
+                                <li><a class="nav-item nav-link {% block nav_item_home %}{% endblock nav_item_home %}" href="/">Home</a></li>
                                 {% if user.is_authenticated %}
-                                    <li><a href="/all-refills">My Homepage</a></li>
-                                    <li><a href="/new-med">Add a Med</a></li>
+                                    <li ><a class="nav-item nav-link {% block nav_item_all_refills %}{% endblock nav_item_all_refills %}" href="/all-refills">My Homepage</a></li>
+                                    <li><a class="nav-item nav-link {% block nav_item_new_med %}{% endblock nav_item_new_med %}"href="/new-med">Add a Med</a></li>
                                     <li><a href="/logout">Logout</a></li>
                                 {% endif %}
                             </ul>
