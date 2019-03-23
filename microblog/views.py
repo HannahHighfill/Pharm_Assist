@@ -22,6 +22,7 @@ from google.oauth2.credentials import Credentials
 import httplib2
 from django.contrib.auth import authenticate
 
+from secret_settings import *
 
 from .models import Refill
 from .models import RefillEvent
