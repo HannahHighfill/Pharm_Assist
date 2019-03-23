@@ -1,8 +1,11 @@
 # Pharmassist #
-**Description:** Pharmassist integrates with your Google Calendar, adding prescription reminders through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, edit and delete your prescription refills and your Google Calendar will reflect all changes. For your privacy and comfort, choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. With Pharmassist you have an easy-to-reach list of your prescription refills and your reminders are integrated into how you already use calendars.
+**Description:** Pharmassist integrates with your Google Calendar and allows you to create reminders for your prescription refills through a simple input form. See a full list of your prescriptions on the homepage, easily add reminders, edit and delete your prescription refills. Your Google Calendar will reflect the changes in all the places you access your Google Calendar, whether desktop, phone, or tablet. For your privacy and comfort, choose to use nicknames so that you don't have to broadcast your prescriptions on your calendar. Enter the pharmacy for each pickup and choose whether you'd like a specific time or an all day event for each presecription. With Pharmassist you have an easy-to-reach list of your prescription refills and reminders when and where you need them.
 
 **Heroku App**
 http://pharmassistrefills.herokuapp.com/
+
+**Presentation**
+https://docs.google.com/presentation/d/1MdZccdFDHaX1yNqIclIgfB_nNBKBXa05oDRPyIHzFd0/edit?usp=sharing
 
 **Team Members:** Jamie, Kendyl, Hannah
 
@@ -21,12 +24,15 @@ http://pharmassistrefills.herokuapp.com/
   * Sign into your Google account to access your Google Calendar with Pharmassist
   * To sign in, click on "Login with Google" in the top, right hand corner and follow the Google authentication and permissions flow
   * Once completed, Pharmassist will redirect you to the Home Page
+![Image of Landing Page](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes%20and%20screenshots/Landing%20Page.png)
 
 2. Home Page:
   * Displays your Google Calendar with Pharmassist refills displayed as entered
   * View a full list of your refills, their calendar nicknames, and the location of the pharmacy where you should pick them up.
   * Edit and delete refills from your calendar by deleting them from the list below using the "trash" and "pencil" icons
   * Refer to your calendar events for full information
+![Image of Home Page, Calendar](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes%20and%20screenshots/homepage_calendar.png)
+![Image of Home Page, Refills](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes%20and%20screenshots/homepage_refills.png)
   
 3.Add a Med Page:
 * Fill in the form provided to add a prescription refill. The refill will be added to both your Google Calendar and your list of meds as displayed on the Home Page
@@ -38,3 +44,4 @@ http://pharmassistrefills.herokuapp.com/
   * All day checkbox: check this box if you'd prefer that the calendar event show as an "all day" event rather than at the time entered. This will make the display on your calendar move from an event to a banner at the top of that day's calendar events
   * Pharmacy location
   * Repeats Every: Choose "weeks" or "months" from the dropdown menu below, and the number above by either typing or using the up and down arrows. This will result in a frequency such as "Every 2 weeks" or "Every 6 months"
+![Image of Add a med page](https://github.com/HannahHighfill/Pharm_Assist/blob/master/wireframes%20and%20screenshots/add_a_med_page.png)
